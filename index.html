@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LeCodex — юридический интеллект, объяснённый просто</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6FB; --surface:#FFFFFF; --surface-2:#EAEEF7;
+  --ink:#12141C; --ink-soft:#565B6B; --ink-faint:#8B90A0; --line:#DDE2EF;
+  --graphite:#161A28; --graphite-2:#222840;
+  --accent:#2A4CE0; --accent-ink:#FFFFFF; --accent-soft:#E4E9FC; --accent-dim:#1E3AB8;
+  --cta:#FF6A3D; --cta-ink:#FFFFFF; --cta-soft:#FFE7DD; --cta-dim:#E5522A;
+  --danger:#B0453C; --danger-soft:#F7E5E2;
+  --r:12px; --r-sm:8px; --r-lg:18px;
+  --sans:'Inter',system-ui,-apple-system,sans-serif; --serif:'Source Serif 4',Georgia,serif;
+  --shadow:0 1px 2px rgba(20,22,28,.05),0 8px 24px -12px rgba(30,40,90,.14);
+  --shadow-lg:0 4px 10px rgba(20,22,28,.06),0 26px 52px -18px rgba(30,40,90,.28);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+:root[data-theme="dark"]{
+  --bg:#0D0F16; --surface:#151926; --surface-2:#1C2133;
+  --ink:#EEF0F6; --ink-soft:#9BA0B3; --ink-faint:#666C80; --line:#282E42;
+  --graphite:#0A0C13; --graphite-2:#151A28;
+  --accent:#5E7CFF; --accent-ink:#0A0E1F; --accent-soft:#1A2140; --accent-dim:#7C94FF;
+  --cta:#FF8A5E; --cta-ink:#1F0D06; --cta-soft:#33200F; --cta-dim:#FFA47C;
+  --danger:#E2695E; --danger-soft:#2B1917;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px -12px rgba(0,0,0,.5);
+  --shadow-lg:0 4px 8px rgba(0,0,0,.35),0 24px 48px -16px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;transition:background .2s ease,color .2s ease;}
+h1,h2,h3{font-family:var(--serif);margin:0;font-weight:700;letter-spacing:-.01em;}
+button,input,textarea{font-family:var(--sans);}
+button{cursor:pointer;}
+a{color:inherit;}
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+
+/* ===== NAVBAR ===== */
+.navbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:none;color:var(--ink);padding:0;}
+.brand-mark{width:32px;height:32px;color:var(--accent);flex-shrink:0;}
+.brand-mark svg{width:100%;height:100%;}
+.brand-word{font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:-.01em;}
+.nav-links{display:flex;gap:4px;}
+.nav-link{background:none;border:none;padding:9px 14px;border-radius:var(--r-sm);font-size:14px;color:var(--ink-soft);font-weight:500;}
+.nav-link:hover{color:var(--ink);background:var(--surface-2);}
+.nav-link.active{color:var(--ink);background:var(--surface-2);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:36px;height:36px;border-radius:var(--r-sm);border:1px solid transparent;background:none;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink);}
+.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;}
+.kbd-hint{font-size:11px;color:var(--ink-faint);border:1px solid var(--line);border-radius:5px;padding:2px 6px;font-family:var(--sans);}
+.btn{border-radius:var(--r-sm);padding:9px 16px;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);transition:background .15s ease,border-color .15s ease,transform .1s ease;}
+.btn:hover{background:var(--surface-2);}
+.btn:active{transform:scale(.98);}
+.btn.primary{background:var(--cta);color:var(--cta-ink);border-color:var(--cta);font-weight:700;}
+.btn.primary:hover{background:var(--cta-dim);}
+.btn.ghost{background:none;}
+.btn.sm{padding:7px 12px;font-size:12.5px;}
+.btn.lg{padding:12px 22px;font-size:14.5px;}
+.mobile-menu-btn{display:none;}
+.country-sel{max-width:118px;padding:7px 6px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);color:var(--ink);font-size:13px;font-weight:600;text-overflow:ellipsis;}
+.nav-links{gap:2px;}
+.nav-link{padding:9px 10px;}
+@media(max-width:1180px){.nav-right .btn{display:none;}}
+@media(max-width:700px){.nav-right{gap:4px;}.country-sel{max-width:84px;padding:7px 3px;font-size:12px;}}
+@media(max-width:400px){.nav-right{gap:2px;}.country-sel{max-width:68px;font-size:11px;}.nav-right .icon-btn{width:32px;height:32px;}.brand-word{font-size:15px;}}
+
+/* ===== APP SHELL / VIEWS ===== */
+.view{display:none;}
+.view.active{display:block;animation:rise .32s cubic-bezier(.2,.7,.3,1);}
+@keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+.wrap-narrow{max-width:820px;margin:0 auto;padding:0 28px;}
+
+/* ===== HOME / HERO ===== */
+.hero{padding:88px 0 64px;}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--accent-dim);font-weight:600;margin-bottom:20px;}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.hero h1{font-size:46px;line-height:1.12;margin-bottom:20px;max-width:560px;}
+.hero h1 em{font-style:normal;color:var(--accent-dim);}
+.hero-sub{font-size:16.5px;line-height:1.6;color:var(--ink-soft);max-width:480px;margin-bottom:30px;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;}
+.hero-trust{display:flex;gap:22px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-faint);}
+.hero-trust span{display:flex;align-items:center;gap:6px;}
+.hero-trust svg{width:14px;height:14px;stroke:var(--accent);fill:none;stroke-width:2;}
+
+.hero-visual{position:relative;height:420px;}
+.float-card{position:absolute;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);padding:18px;}
+.fc-chat{width:290px;top:0;left:10px;z-index:2;}
+.fc-chat .fc-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start;}
+.fc-avatar{width:22px;height:22px;border-radius:6px;background:var(--accent-soft);color:var(--accent-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:700;}
+.fc-bubble{font-size:12.5px;line-height:1.5;color:var(--ink-soft);background:var(--surface-2);border-radius:8px;padding:8px 10px;}
+.fc-bubble.me{background:var(--accent-soft);color:var(--ink);}
+.fc-doc{width:230px;top:190px;right:0;z-index:1;transform:rotate(3deg);padding:0;overflow:hidden;}
+.fc-doc-head{background:var(--graphite);color:#fff;font-size:11px;padding:10px 14px;font-family:var(--serif);}
+.fc-doc-body{padding:14px;display:flex;flex-direction:column;gap:6px;}
+.fc-doc-line{height:6px;background:var(--surface-2);border-radius:3px;}
+.fc-doc-line.w60{width:60%;}
+.fc-doc-line.w80{width:80%;}
+.fc-doc-line.w40{width:40%;}
+.fc-badge{width:190px;bottom:6px;left:70px;z-index:3;display:flex;align-items:center;gap:10px;transform:rotate(-2deg);}
+.fc-badge-icon{width:30px;height:30px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fc-badge-icon svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
+.fc-badge b{display:block;font-size:12px;}
+.fc-badge span{font-size:11px;color:var(--ink-faint);}
+
+.section{padding:56px 0;}
+.section-head{margin-bottom:34px;max-width:560px;}
+.section-head .eyebrow{margin-bottom:12px;}
+.section-head h2{font-size:30px;line-height:1.2;margin-bottom:10px;}
+.section-head p{font-size:14.5px;color:var(--ink-soft);line-height:1.6;}
+
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+.feature-card{background:var(--surface);padding:26px;display:flex;flex-direction:column;gap:10px;}
+.feature-icon{width:36px;height:36px;border-radius:9px;background:var(--accent-soft);color:var(--accent-dim);display:flex;align-items:center;justify-content:center;}
+.feature-icon svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.feature-card h3{font-size:15.5px;font-family:var(--sans);font-weight:700;}
+.feature-card p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+.feature-card button{align-self:flex-start;background:none;border:none;padding:0;color:var(--accent-dim);font-size:12.5px;font-weight:600;margin-top:2px;}
+
+.stats-strip{display:flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+.stat{flex:1;padding:20px 24px;border-right:1px solid var(--line);}
+.stat:last-child{border-right:none;}
+.stat strong{display:block;font-family:var(--serif);font-size:26px;color:var(--accent-dim);}
+.stat span{font-size:12px;color:var(--ink-soft);}
+
+.disclaimer-bar{display:flex;gap:12px;align-items:flex-start;background:var(--surface-2);border-radius:var(--r);padding:16px 20px;font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin-top:8px;}
+.disclaimer-bar svg{width:16px;height:16px;stroke:var(--ink-faint);fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px;}
+
+/* ===== CHAT / WORKSPACE ===== */
+.chat-shell{display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 65px);}
+.chat-sidebar{border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;padding:16px 12px;overflow-y:auto;}
+.new-chat-btn{width:100%;margin-bottom:14px;justify-content:flex-start;gap:8px;display:flex;align-items:center;}
+.new-chat-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
+.chat-hist-label{font-size:11px;color:var(--ink-faint);font-weight:600;padding:0 8px;margin-bottom:6px;text-transform:none;}
+.chat-hist-item{width:100%;text-align:left;background:none;border:none;border-radius:var(--r-sm);padding:9px 10px;font-size:13px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-hist-item:hover{background:var(--surface-2);}
+.chat-hist-item.active{background:var(--accent-soft);color:var(--ink);font-weight:600;}
+
+.chat-main{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.chat-scroll{flex:1;overflow-y:auto;padding:28px 0;}
+.chat-inner{max-width:680px;margin:0 auto;padding:0 28px;display:flex;flex-direction:column;gap:16px;}
+.chat-empty{text-align:center;padding:60px 20px;}
+.chat-empty h2{font-size:22px;margin-bottom:8px;}
+.chat-empty p{font-size:13.5px;color:var(--ink-soft);margin-bottom:26px;}
+.suggest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;margin:0 auto;}
+.suggest-chip{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+.suggest-chip:hover{border-color:var(--accent);color:var(--ink);}
+
+.msg-row{display:flex;gap:10px;max-width:100%;}
+.msg-row.user{flex-direction:row-reverse;}
+.msg-avatar{width:26px;height:26px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.msg-row.bot .msg-avatar{background:var(--graphite);color:#fff;}
+.msg-row.user .msg-avatar{background:var(--accent-soft);color:var(--accent-dim);}
+.msg-bubble{max-width:78%;padding:13px 16px;border-radius:var(--r);font-size:14.5px;line-height:1.6;}
+.msg-row.bot .msg-bubble{background:var(--surface);border:1px solid var(--line);}
+.msg-row.user .msg-bubble{background:var(--accent);color:var(--accent-ink);}
+.msg-bubble.typing{color:var(--ink-faint);}
+.typing-dots{display:inline-flex;gap:3px;align-items:center;}
+.typing-dots span{width:5px;height:5px;border-radius:50%;background:var(--ink-faint);animation:blink 1.2s infinite ease-in-out;}
+.typing-dots span:nth-child(2){animation-delay:.2s;}
+.typing-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.25;}40%{opacity:1;}}
+.ans-block{margin:10px 0;}
+.ans-label{font-size:11.5px;font-weight:700;color:var(--accent-dim);margin-bottom:4px;}
+.ans-block ol{margin:4px 0 0;padding-left:18px;}
+.ans-block li{margin-bottom:3px;}
+
+.chat-input-wrap{border-top:1px solid var(--line);padding:16px 28px;background:var(--bg);}
+.chat-input-row{max-width:680px;margin:0 auto;display:flex;gap:10px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 8px 8px 16px;}
+.chat-input-row:focus-within{border-color:var(--accent);}
+.chat-input-row textarea{flex:1;resize:none;border:none;background:none;font-family:var(--sans);font-size:14.5px;color:var(--ink);line-height:1.4;max-height:140px;padding:8px 0;outline:none;}
+.send-btn{width:36px;height:36px;border-radius:var(--r-sm);background:var(--accent);color:var(--accent-ink);border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;}
+.send-btn:disabled{opacity:.4;}
+.chat-hint{max-width:680px;margin:8px auto 0;text-align:center;font-size:11px;color:var(--ink-faint);}
+.sidebar-toggle{display:none;}
+
+/* ===== DOCUMENTS ===== */
+.docs-toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
+.search-box{flex:1;min-width:220px;display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 14px;}
+.search-box svg{width:16px;height:16px;stroke:var(--ink-faint);fill:none;stroke-width:1.8;flex-shrink:0;}
+.search-box input{border:none;background:none;outline:none;font-size:13.5px;color:var(--ink);width:100%;}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:12.5px;color:var(--ink-soft);font-weight:500;}
+.chip:hover{border-color:var(--accent);}
+.chip.active{background:var(--graphite);color:#fff;border-color:var(--graphite);}
+:root[data-theme="dark"] .chip.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);}
+
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
+.doc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:10px;position:relative;transition:border-color .15s ease;}
+.doc-card:hover{border-color:var(--accent-dim);}
+.doc-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.doc-icon{width:34px;height:34px;border-radius:9px;background:var(--accent-soft);color:var(--accent-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.popular-badge{font-size:10.5px;font-weight:700;color:var(--accent-dim);background:var(--accent-soft);padding:3px 8px;border-radius:999px;}
+.doc-card h3{font-size:15px;font-family:var(--sans);font-weight:700;}
+.doc-card .cat{font-size:11.5px;color:var(--ink-faint);}
+.doc-card p{margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.5;flex:1;}
+.doc-actions{display:flex;gap:8px;margin-top:4px;}
+.doc-actions .btn{flex:1;justify-content:center;}
+.doc-actions .icon-btn{border:1px solid var(--line);}
+.empty-state{text-align:center;padding:60px 20px;color:var(--ink-faint);}
+.empty-state svg{width:34px;height:34px;stroke:var(--ink-faint);fill:none;stroke-width:1.5;margin-bottom:12px;}
+
+/* ===== MODALS ===== */
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,12,16,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:60;}
+.modal-backdrop.hidden{display:none;}
+.modal-backdrop.hidden .modal{animation:none;}
+.modal{background:var(--surface);border-radius:var(--r-lg);max-width:480px;width:100%;padding:26px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:pop .18s cubic-bezier(.2,.8,.3,1);}
+.modal.wide{max-width:640px;}
+@keyframes pop{from{opacity:0;transform:scale(.97) translateY(6px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px;}
+.modal h2{font-size:18px;}
+.modal .sub{font-size:12.5px;color:var(--ink-soft);margin-bottom:18px;}
+.modal-close{width:28px;height:28px;border-radius:6px;border:none;background:none;color:var(--ink-faint);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.modal-close:hover{background:var(--surface-2);color:var(--ink);}
+.modal-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;}
+
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:5px;}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 12px;font-family:var(--sans);font-size:13.5px;color:var(--ink);background:var(--bg);}
+.field input:focus-visible,.field textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+.modal-actions{display:flex;justify-content:space-between;gap:8px;margin-top:20px;}
+.modal-actions .right{display:flex;gap:8px;margin-left:auto;}
+
+/* wizard */
+.wiz-progress{display:flex;gap:6px;margin-bottom:20px;}
+.wiz-dot{flex:1;height:3px;border-radius:2px;background:var(--line);}
+.wiz-dot.done{background:var(--accent);}
+.wiz-dot.current{background:var(--accent-dim);}
+.wiz-step-label{font-size:11px;color:var(--ink-faint);font-weight:600;margin-bottom:6px;}
+
+/* document preview */
+.doc-toolbar{display:flex;align-items:center;gap:6px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--line);}
+.doc-toolbar .spacer{flex:1;}
+.doc-page{background:#FDFCF8;border:1px solid var(--line);border-radius:6px;padding:34px 30px;font-family:var(--serif);white-space:pre-wrap;font-size:13px;line-height:1.75;color:#20222A;box-shadow:var(--shadow);}
+:root[data-theme="dark"] .doc-page{background:#EDEBE2;color:#1B1D24;}
+
+/* ===== LEARNING ===== */
+.course-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.course-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;cursor:pointer;transition:border-color .15s ease;}
+.course-card:hover{border-color:var(--accent-dim);}
+.course-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.course-num{font-family:var(--serif);font-size:18px;color:var(--accent-dim);}
+.course-done-badge{font-size:10.5px;font-weight:700;color:var(--accent-dim);background:var(--accent-soft);padding:3px 8px;border-radius:999px;}
+.course-card h3{font-size:15.5px;margin-bottom:6px;}
+.course-card .meta{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+.progress-bar{height:5px;background:var(--surface-2);border-radius:3px;overflow:hidden;}
+.progress-bar > div{height:100%;background:var(--accent);border-radius:3px;transition:width .3s ease;}
+.progress-label{font-size:11px;color:var(--ink-faint);margin-top:6px;}
+
+.lesson-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.lesson-row{width:100%;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 14px;font-size:13px;color:var(--ink);display:flex;align-items:center;gap:10px;}
+.lesson-row:hover{border-color:var(--accent-dim);}
+.lesson-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.lesson-row.done .lesson-check{background:var(--accent);border-color:var(--accent);}
+.lesson-row.done .lesson-check svg{width:11px;height:11px;stroke:var(--accent-ink);fill:none;stroke-width:2.6;}
+.lesson-text{font-size:13.5px;line-height:1.7;color:var(--ink-soft);margin:0 0 18px;}
+.quiz-box{border-top:1px solid var(--line);padding-top:16px;}
+.quiz-q{font-size:13.5px;font-weight:700;margin-bottom:10px;}
+.quiz-opt{display:flex;align-items:center;gap:9px;font-size:13px;padding:8px 0;cursor:pointer;}
+.quiz-fb{margin-top:12px;font-size:13px;padding:11px 13px;border-radius:var(--r-sm);}
+.quiz-fb.ok{background:var(--accent-soft);color:var(--accent-dim);}
+.quiz-fb.no{background:var(--danger-soft);color:var(--danger);}
+
+/* ===== PROFILE SLIDE-OVER ===== */
+.slide-backdrop{position:fixed;inset:0;background:rgba(10,12,16,.4);z-index:55;opacity:0;pointer-events:none;transition:opacity .2s ease;}
+.slide-backdrop.open{opacity:1;pointer-events:auto;}
+.slide-panel{position:fixed;top:0;right:-380px;width:360px;max-width:88vw;height:100%;background:var(--surface);z-index:56;box-shadow:var(--shadow-lg);transition:right .25s cubic-bezier(.2,.8,.3,1);padding:24px;overflow-y:auto;}
+.slide-panel.open{right:0;}
+.slide-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.slide-head h2{font-size:18px;}
+.profile-block{margin-bottom:26px;}
+.profile-block h4{font-size:11.5px;font-weight:700;color:var(--ink-faint);margin-bottom:10px;}
+.profile-list{display:flex;flex-direction:column;gap:6px;}
+.profile-item{font-size:13px;color:var(--ink-soft);background:var(--bg);border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 12px;}
+.profile-empty{font-size:12.5px;color:var(--ink-faint);font-style:italic;}
+.overall-progress{background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:16px;}
+
+/* ===== COMMAND PALETTE ===== */
+.cmdk-backdrop{position:fixed;inset:0;background:rgba(10,12,16,.45);display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:70;}
+.cmdk-backdrop.hidden{display:none;}
+.cmdk{width:560px;max-width:90vw;background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);overflow:hidden;}
+.cmdk-input-row{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);}
+.cmdk-input-row svg{width:17px;height:17px;stroke:var(--ink-faint);fill:none;stroke-width:1.8;}
+.cmdk-input-row input{flex:1;border:none;outline:none;background:none;font-size:15px;color:var(--ink);}
+.cmdk-results{max-height:340px;overflow-y:auto;padding:8px;}
+.cmdk-item{width:100%;text-align:left;background:none;border:none;padding:10px 12px;border-radius:var(--r-sm);display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);}
+.cmdk-item.sel{background:var(--surface-2);}
+.cmdk-tag{margin-left:auto;font-size:10.5px;color:var(--ink-faint);border:1px solid var(--line);border-radius:5px;padding:2px 6px;}
+.cmdk-empty{padding:24px;text-align:center;font-size:13px;color:var(--ink-faint);}
+
+/* ===== MOBILE ===== */
+.mobile-nav-panel{display:none;}
+@media (max-width:1020px){
+  .nav-links{display:none;}
+  .mobile-menu-btn{display:flex;}
+  .hero-grid{grid-template-columns:1fr;gap:40px;}
+  .hero-visual{height:300px;}
+  .hero h1{font-size:32px;}
+  .feature-grid{grid-template-columns:1fr;}
+  .stats-strip{flex-direction:column;}
+  .stat{border-right:none;border-bottom:1px solid var(--line);}
+  .stat:last-child{border-bottom:none;}
+  .course-grid{grid-template-columns:1fr;}
+  .chat-shell{grid-template-columns:1fr;}
+  .chat-sidebar{position:fixed;left:-280px;top:65px;bottom:0;width:260px;z-index:45;transition:left .22s ease;}
+  .chat-sidebar.open{left:0;}
+  .sidebar-toggle{display:flex;}
+  .wrap,.wrap-narrow{padding:0 18px;}
+  .navbar{padding:12px 16px;}
+}
+@media (max-width:520px){
+  .suggest-grid{grid-template-columns:1fr;}
+  .hero-cta{flex-direction:column;align-items:stretch;}
+}
+
+/* ===== LE CODEX 2.0 ENHANCEMENTS ===== */
+body::before{
+  content:"";position:fixed;inset:-20%;pointer-events:none;z-index:-1;
+  background:
+    radial-gradient(circle at 15% 15%, color-mix(in srgb,var(--accent) 10%,transparent), transparent 28%),
+    radial-gradient(circle at 85% 30%, color-mix(in srgb,#7B61FF 7%,transparent), transparent 26%),
+    radial-gradient(circle at 55% 90%, color-mix(in srgb,#00A8FF 5%,transparent), transparent 24%);
+  animation:bgDrift 18s ease-in-out infinite alternate;
+}
+@keyframes bgDrift{from{transform:translate3d(-1%,0,0) scale(1)}to{transform:translate3d(1%,1%,0) scale(1.04)}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1)}
+.reveal.in{opacity:1;transform:none}
+.feature-card,.doc-card,.course-card,.country-card,.template-card{
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.feature-card:hover,.doc-card:hover,.course-card:hover,.country-card:hover,.template-card:hover{
+  transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--accent-dim);
+}
+.hero-visual .float-card{animation:floaty 5s ease-in-out infinite}
+.hero-visual .fc-doc{animation-delay:-1.8s}
+.hero-visual .fc-badge{animation-delay:-3s}
+@keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -8px}}
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:0 auto;max-width:1120px}
+.country-grid,.template-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.country-card,.template-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden}
+.country-card::after,.template-card::after{
+  content:"";position:absolute;width:90px;height:90px;right:-35px;top:-35px;border-radius:50%;
+  background:var(--accent-soft);opacity:.8;
+}
+.country-flag{font-size:27px;margin-bottom:12px}
+.country-card h3,.template-card h3{font-family:var(--sans);font-size:15px;margin-bottom:6px}
+.country-card p,.template-card p{font-size:12px;line-height:1.55;color:var(--ink-soft);min-height:56px}
+.country-card a{display:inline-flex;margin-top:10px;color:var(--accent-dim);font-size:12px;font-weight:700;text-decoration:none}
+.country-card a:hover{text-decoration:underline}
+.country-tag{display:inline-block;font-size:10px;color:var(--accent-dim);background:var(--accent-soft);padding:4px 7px;border-radius:999px;margin-bottom:8px}
+.template-card .template-icon{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;color:var(--accent-dim);margin-bottom:12px}
+.ai-profile{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);
+  background:var(--surface);font-size:12px;color:var(--ink-soft)
+}
+.ai-profile strong{color:var(--ink)}
+.ai-profile button{margin-left:auto;background:none;border:0;color:var(--accent-dim);font-weight:700;font-size:11px}
+.chat-main{position:relative}
+.status-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--accent-dim);background:var(--accent-soft);padding:5px 8px;border-radius:999px}
+.status-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35;transform:scale(.75)}}
+.modal.wide-xl{max-width:820px}
+.country-detail{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.country-detail .detail-box{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px}
+.country-detail h4{font-size:12px;margin:0 0 6px}
+.country-detail p{font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin:0}
+@media(max-width:1050px){.country-grid,.template-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.country-grid,.template-grid{grid-template-columns:1fr 1fr}.country-detail{grid-template-columns:1fr}}
+@media(max-width:480px){.country-grid,.template-grid{grid-template-columns:1fr}}
+
+/* ===== redesign v2: yellow + black ===== */
+:root{--bg:#FBFAF6;--surface:#FFFFFF;--surface-2:#F3F1E8;--ink:#0F0F0F;--ink-soft:#55554F;--ink-faint:#8A8A82;--line:#E6E3D6;--graphite:#0F0F0F;--graphite-2:#1C1C1C;--accent:#0F0F0F;--accent-ink:#FFFFFF;--accent-soft:#FFF3C2;--accent-dim:#000000;--cta:#FFC61A;--cta-ink:#0F0F0F;--cta-soft:#FFF1BD;--cta-dim:#F0B400;}:root[data-theme="dark"]{--bg:#0C0C0C;--surface:#151515;--surface-2:#1D1D1D;--ink:#F4F4EE;--ink-soft:#A5A59C;--ink-faint:#6E6E66;--line:#2A2A2A;--graphite:#080808;--graphite-2:#141414;--accent:#FFC61A;--accent-ink:#0F0F0F;--accent-soft:#2B2509;--accent-dim:#FFD84D;--cta:#FFC61A;--cta-ink:#0F0F0F;--cta-soft:#33290A;--cta-dim:#FFD84D;}
+.btn{border-radius:999px;font-weight:700;transition:transform .15s,box-shadow .15s,background .15s}
+.btn:hover{transform:translateY(-1px)}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #FFC61A;outline-offset:2px}
+.btn.primary{box-shadow:0 10px 20px -10px rgba(240,180,0,.9)}
+.hx{padding-top:20px}
+.hx-card{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;background:#0F0F0F;color:#fff;border:1px solid var(--line);border-radius:32px;padding:56px 56px 48px;overflow:hidden}
+.hx-tag{display:inline-block;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 14px;font-size:13px;margin-bottom:20px}
+.hx-card h1{color:#fff;font-size:clamp(30px,4.4vw,52px);line-height:1.08;margin:0 0 20px}
+.hx-card h1 span{color:#FFC61A}
+.hx-list{list-style:none;padding:0;margin:0 0 28px;display:grid;gap:12px;color:#D9D9D2}
+.hx-list li{padding-left:28px;position:relative}
+.hx-list li:before{content:"+";position:absolute;left:0;top:-2px;color:#FFC61A;font-weight:800;font-size:20px}
+.hx-card .btn:not(.primary){background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+.hx-art{width:100%;height:auto;max-height:380px}
+.bn-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.bn{background:var(--surface-2);border-radius:24px;padding:28px;display:grid;grid-template-columns:auto 1fr;gap:6px 16px;align-items:center}
+.bn b{width:36px;height:36px;border-radius:50%;background:#FFC61A;color:#0F0F0F;display:grid;place-items:center;font-weight:800}
+.bn h3{margin:0;font-size:16px;text-transform:uppercase;letter-spacing:.03em}
+.bn p{grid-column:2;margin:0;color:var(--ink-soft)}
+.bn-wide{grid-column:1/-1;background:#FFC61A;color:#0F0F0F;grid-template-columns:1fr}
+.bn-wide p{grid-column:1;color:#2B2B26}
+.feature-card{border-radius:24px}
+.feature-card:nth-child(1){background:#FFC61A;color:#0F0F0F;border-color:#FFC61A}
+.feature-card:nth-child(2){background:#0F0F0F;color:#fff;border-color:var(--line)}
+.feature-card:nth-child(1) p{color:#2B2B26}
+.feature-card:nth-child(2) p{color:#CFCFC8}
+.feature-card:nth-child(1) button,.feature-card:nth-child(2) button{color:inherit;font-weight:700;text-decoration:underline}
+.feature-card:nth-child(1) .feature-icon,.feature-card:nth-child(2) .feature-icon{background:rgba(128,128,128,.22);color:inherit}
+.cta-end{background:#0F0F0F;color:#fff;border:1px solid var(--line);border-radius:32px;padding:44px;display:flex;gap:24px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+.cta-end h2{margin:0 0 8px;color:#fff}
+.cta-end p{margin:0;color:#CFCFC8;max-width:520px}
+@media(max-width:820px){.hx-card{grid-template-columns:1fr;padding:32px 22px}.bn-grid{grid-template-columns:1fr}.cta-end{padding:28px 22px}}
+
+body::before{display:none!important}
+h1,h2,h3{font-family:var(--sans);font-weight:800;letter-spacing:-.02em}
+.feature-grid{gap:16px;background:none;border:0;border-radius:0;overflow:visible}
+.feature-card:nth-child(3){background:var(--surface-2);border:1px solid var(--line)}
+.bn{align-items:start}
+.hx{padding-left:0;padding-right:0}
+@media(max-width:640px){.nav-right .btn{display:none}}
+.hx{margin-bottom:12px}
+@media(max-width:820px){.hx{padding-left:18px;padding-right:18px}}
+
+.ill-panel{background:#FFF8E1;border-radius:28px;display:grid;place-items:center;padding:16px}
+.ill-panel img{display:block;max-width:100%;height:auto}
+.hx-art-wrap img{max-height:340px;width:auto}
+.section-head.has-ill{display:grid;grid-template-columns:1fr 260px;gap:28px;align-items:center;max-width:none}
+.section-head.has-ill .ill-panel img{max-height:180px;width:auto}
+.chat-empty .ill-panel{width:min(260px,70%);margin:0 auto 18px}
+.chat-empty .ill-panel img{max-height:120px;width:auto}
+@media(max-width:820px){.section-head.has-ill{grid-template-columns:1fr}.section-head.has-ill .ill-panel{max-width:240px}}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <button class="brand" data-goto="home" aria-label="LeCodex — на главную">
+    <span class="brand-mark"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" stroke="currentColor" stroke-width="2"/><path d="M11.5 9v10.5h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.5 9h3M20.5 13h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <span class="brand-word">LeCodex</span>
+  </button>
+  <div class="nav-links" role="tablist" aria-label="Основная навигация">
+    <button class="nav-link active" data-goto="home">Возможности</button>
+    <button class="nav-link" data-goto="chat">AI-консультант</button>
+    <button class="nav-link" data-goto="documents">Документы</button>
+    <button class="nav-link" data-goto="analyze">Анализ</button>
+    <button class="nav-link" data-goto="learning">Обучение</button>
+    <button class="nav-link" data-goto="countries">Право стран</button>
+  </div>
+  <div class="nav-right">
+    <select id="countrySel" class="country-sel" aria-label="Страна, по праву которой работает LeCodex" title="Страна права"></select>
+    <button class="icon-btn" id="cmdkOpenBtn" aria-label="Поиск (Ctrl+K)" title="Поиск (Ctrl+K)">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </button>
+    <button class="icon-btn" id="profileBtn" aria-label="Мой прогресс">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+    </button>
+    <button class="icon-btn" id="themeToggle" aria-label="Переключить тему">
+      <svg viewBox="0 0 24 24" id="themeIcon"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8L6 18M18 6l1.8-1.8"/></svg>
+    </button>
+    <button class="btn primary sm" data-goto="chat">Начать бесплатно</button>
+    <button class="icon-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-nav-panel" id="mobileNavPanel"></div>
+
+<main>
+
+  <!-- HOME -->
+  <section class="view active" id="view-home">
+    <div class="wrap hx">
+      <div class="hx-card">
+        <div class="hx-text">
+          <span class="hx-tag">Правовая помощь онлайн</span>
+          <h1>Правовые вопросы — <span>понятным языком</span></h1>
+          <ul class="hx-list">
+            <li>Объясним вашу ситуацию простыми словами и покажем конкретные шаги</li>
+            <li>Подготовим нужный документ по готовому шаблону</li>
+          </ul>
+          <div class="hero-cta">
+            <button class="btn primary lg" data-goto="chat">Спросить LeCodex</button>
+            <button class="btn lg" data-goto="documents">Документы</button>
+          </div>
+        </div>
+        <div class="ill-panel hx-art-wrap"><img src="img/legal-counsel.svg" alt="Юрист с документом" width="756" height="800"></div>
+      </div>
+    </div>
+
+    <div class="wrap section">
+      <div class="section-head">
+        <div class="eyebrow">Как это работает</div>
+        <h2>Три способа получить ясность</h2>
+        <p>От быстрого вопроса до готового документа — LeCodex ведёт вас по ситуации шаг за шагом.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4V4z"/></svg></div>
+          <h3>AI-консультант</h3>
+          <p>Опишите ситуацию своими словами и получите структурированный ответ: суть, значение и конкретные шаги.</p>
+          <button data-goto="chat">Открыть консультанта</button>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7V3z"/><path d="M9 12h6M9 16h6"/></svg></div>
+          <h3>Документы за минуты</h3>
+          <p>Исковые заявления, претензии, доверенности и договоры — заполните мастер и скачайте готовый файл.</p>
+          <button data-goto="documents">Смотреть документы</button>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M3 6l9-3 9 3-9 3-9-3z"/><path d="M6 8v6c0 1.5 2.7 3 6 3s6-1.5 6-3V8"/></svg></div>
+          <h3>Обучение без жаргона</h3>
+          <p>Короткие уроки с тестами — от основ правовой системы до защиты прав потребителей.</p>
+          <button data-goto="learning">Начать учиться</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap section" style="padding-top:0;">
+      <div class="section-head">
+        <h2>LeCodex помогает с нескольких сторон</h2>
+      </div>
+      <div class="bn-grid">
+        <div class="bn"><b>1</b><h3>Понять ситуацию</h3><p>Ответ в три части: суть, что это значит и что можно сделать.</p></div>
+        <div class="bn"><b>2</b><h3>Подготовить документ</h3><p>Заполните поля мастера и скачайте готовый файл.</p></div>
+        <div class="bn"><b>3</b><h3>Знать свои права</h3><p>Короткие уроки с тестами по основным отраслям права.</p></div>
+        <div class="bn"><b>4</b><h3>Видеть закон своей страны</h3><p>Ссылки на официальные порталы законодательства пятнадцати стран.</p></div>
+        <div class="bn bn-wide"><h3>Бесплатно и без регистрации</h3><p>Справочная информация доступна сразу, без аккаунта.</p></div>
+      </div>
+    </div>
+
+    <div class="wrap section" style="padding-top:0;">
+      <div class="cta-end">
+        <div>
+          <h2>Не знаете, с чего начать?</h2>
+          <p>Опишите ситуацию своими словами — LeCodex разберёт её по шагам.</p>
+        </div>
+        <button class="btn primary lg" data-goto="chat">Спросить LeCodex</button>
+      </div>
+      <div class="disclaimer-bar">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <div>LeCodex даёт справочную информацию и не заменяет консультацию практикующего юриста. AI не является адвокатом и не гарантирует юридический результат по вашему делу.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section class="view" id="view-chat">
+    <div class="chat-shell">
+      <aside class="chat-sidebar" id="chatSidebar">
+        <button class="btn new-chat-btn" id="newChatBtn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Новый диалог</button>
+        <div class="chat-hist-label">История</div>
+        <div id="chatHistList"></div>
+      </aside>
+      <div class="chat-main">
+        <div class="ai-profile"><span class="status-pill">AI онлайн</span><span>Профиль: <strong id="aiProfileLabel">Гражданское право · Казахстан</strong></span><button id="aiProfileBtn">Настроить</button></div>
+        <div class="chat-scroll" id="chatScroll">
+          <div class="chat-inner" id="chatInner"></div>
+        </div>
+        <div class="chat-input-wrap">
+          <div class="chat-input-row">
+            <button class="icon-btn sidebar-toggle" id="sidebarToggle" aria-label="История диалогов"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <textarea id="chatInput" rows="1" placeholder="Опишите вашу правовую ситуацию…" aria-label="Сообщение"></textarea>
+            <button class="send-btn" id="sendBtn" aria-label="Отправить"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+          <div class="chat-hint">Enter — отправить · Shift+Enter — новая строка. Ответы носят справочный характер.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section class="view" id="view-documents">
+    <div class="wrap section">
+      <div class="section-head has-ill">
+        <div class="sh-text">
+        <div class="eyebrow">Готовые формы</div>
+        <h2>Юридические документы</h2>
+        <p>Скачайте пустой бланк или пройдите мастер — документ соберётся автоматически на основе ваших данных.</p>
+        </div>
+        <div class="ill-panel"><img src="img/sign-here.svg" alt="" width="646" height="800"></div>
+      </div>
+      <div class="disclaimer-bar" id="docCountryBar" style="margin:0 0 14px;"></div>
+      <div class="docs-toolbar">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="docSearch" type="text" placeholder="Найти документ…" aria-label="Поиск документов">
+        </div>
+        <div class="filter-chips" id="docFilters"></div>
+      </div>
+      <div class="docs-grid" id="docsGrid"></div>
+    </div>
+  </section>
+
+  <!-- LEARNING -->
+  <section class="view" id="view-learning">
+    <div class="wrap section">
+      <div class="section-head has-ill">
+        <div class="sh-text">
+        <div class="eyebrow">Право без сложных слов</div>
+        <h2>Обучение</h2>
+        <p>Каждый курс — короткая теория и проверочный тест. Прогресс сохраняется автоматически.</p>
+        </div>
+        <div class="ill-panel"><img src="img/studying.svg" alt="" width="849" height="842"></div>
+      </div>
+      <div class="course-grid" id="courseGrid"></div>
+    </div>
+  </section>
+
+
+  <!-- COUNTRIES -->
+  <section class="view" id="view-countries">
+    <div class="wrap section">
+      <div class="section-head has-ill">
+        <div class="sh-text">
+        <div class="eyebrow">Сравнение правовых систем</div>
+        <h2>Право 15 стран — в одном месте</h2>
+        <p>Быстрый навигатор к официальным источникам законодательства. Нажмите на страну, чтобы открыть краткую справку и официальный правовой портал.</p>
+        </div>
+        <div class="ill-panel"><img src="img/world.svg" alt="" width="825" height="591"></div>
+      </div>
+      <div class="country-grid reveal" id="countryGrid"></div>
+      <div class="disclaimer-bar" style="margin-top:18px;">
+        <div>Справочник не заменяет проверку конкретной нормы. Для практического применения всегда открывайте актуальную редакцию на официальном государственном ресурсе.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYZE -->
+  <section class="view" id="view-analyze">
+    <div class="wrap-narrow section">
+      <div class="section-head"><div class="eyebrow">Анализ</div><h2>Проверка документов</h2>
+        <p>Вставьте текст или сфотографируйте документ — LeCodex найдёт риски и подскажет шаги. Фото уходит на сервер ИИ только для анализа и нигде не сохраняется на сайте.</p></div>
+      <div class="filter-chips" id="anModes"></div>
+      <div class="field" style="margin-top:16px;"><label for="anText">Текст (иск, претензия, договор) — по желанию, если есть фото</label>
+        <textarea id="anText" rows="8" placeholder="Вставьте текст документа…"></textarea></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+        <label class="btn">📷 Сфотографировать<input type="file" id="anCam" accept="image/*" capture="environment" hidden></label>
+        <label class="btn">🖼 Выбрать фото<input type="file" id="anGal" accept="image/*" hidden></label>
+        <span id="anPrevWrap" style="display:none;align-items:center;gap:8px;"><img id="anPrev" alt="Фото документа" style="height:56px;border-radius:6px;border:1px solid var(--line);"><button class="btn ghost sm" id="anClear">Убрать</button></span>
+      </div>
+      <button class="btn primary lg" id="anRun">Проанализировать</button>
+      <div class="msg-bubble" id="anOut" style="display:none;max-width:100%;margin-top:18px;background:var(--surface);border:1px solid var(--line);"></div>
+      <div class="disclaimer-bar"><div>Результат — справочная информация, а не юридическая консультация. Перед подачей в суд или подписанием проверьте документ у практикующего юриста.</div></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Profile slide-over -->
+<div class="slide-backdrop" id="slideBackdrop"></div>
+<aside class="slide-panel" id="slidePanel" aria-label="Мой прогресс">
+  <div class="slide-head"><h2>Мой прогресс</h2><button class="modal-close" id="slideClose" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="overall-progress" style="margin-bottom:26px;">
+    <div class="progress-label" id="overallLabel" style="margin-bottom:8px;">Общий прогресс обучения</div>
+    <div class="progress-bar"><div id="overallBar" style="width:0%;"></div></div>
+  </div>
+  <div class="profile-block">
+    <h4>Последние диалоги</h4>
+    <div class="profile-list" id="profileChats"></div>
+  </div>
+  <div class="profile-block">
+    <h4>Сохранённые документы</h4>
+    <div class="profile-list" id="profileDocs"></div>
+  </div>
+  <div class="profile-block">
+    <h4>Пройденные уроки</h4>
+    <div class="profile-list" id="profileLessons"></div>
+  </div>
+</aside>
+
+<!-- Command palette -->
+<div class="cmdk-backdrop hidden" id="cmdkBackdrop">
+  <div class="cmdk">
+    <div class="cmdk-input-row">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="cmdkInput" type="text" placeholder="Искать документы, уроки, разделы…" aria-label="Командная палитра">
+    </div>
+    <div class="cmdk-results" id="cmdkResults"></div>
+  </div>
+</div>
+
+<!-- Generic modal -->
+<div class="modal-backdrop hidden" id="modalBackdrop">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+/* ===================== THEME ===================== */
+const root=document.documentElement;
+function applyTheme(t){root.setAttribute('data-theme',t);localStorage.setItem('lecodex_theme',t);}
+(function initTheme(){
+  const saved=localStorage.getItem('lecodex_theme');
+  if(saved){applyTheme(saved);}
+  else{applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}
+})();
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  applyTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+});
+
+/* ===================== NAVIGATION ===================== */
+function goTo(v){
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(b=>b.classList.toggle('active',b.dataset.goto===v));
+  closeMobileNav();
+  window.scrollTo({top:0});
+}
+document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goTo(el.dataset.goto)));
+
+/* mobile nav */
+const mobileMenuBtn=document.getElementById('mobileMenuBtn');
+const mobileNavPanel=document.getElementById('mobileNavPanel');
+mobileNavPanel.innerHTML='<div style="display:flex;flex-direction:column;gap:2px;padding:10px 16px 16px;border-bottom:1px solid var(--line);">'+
+  ['home:Возможности','chat:AI-консультант','documents:Документы','analyze:Анализ','learning:Обучение','countries:Право стран'].map(p=>{const[v,l]=p.split(':');return `<button class="nav-link" data-goto="${v}" style="text-align:left;width:100%;">${l}</button>`;}).join('')+'</div>';
+mobileNavPanel.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goTo(el.dataset.goto)));
+function closeMobileNav(){mobileNavPanel.style.display='none';}
+mobileMenuBtn.addEventListener('click',()=>{mobileNavPanel.style.display=mobileNavPanel.style.display==='block'?'none':'block';});
+
+/* ===================== CAPABILITIES ===================== */
+async function useClaude(name){
+  try{ if(typeof claude==='undefined'||!claude.use) return null; return await claude.use(name); }
+  catch(e){ return null; }
+}
+let sample=null; useClaude('sample').then(s=>{sample=s;});
+let downloads=null; useClaude('downloads').then(d=>{downloads=d;});
+function fallbackDownload(filename,text){
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+/* ===================== STORAGE ===================== */
+const store={
+  get(k,fallback){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+
+/* ===================== CHAT ===================== */
+let chats=store.get('lecodex_chats',[]);
+let activeChatId=store.get('lecodex_active_chat',null);
+const chatInner=document.getElementById('chatInner');
+const chatScroll=document.getElementById('chatScroll');
+const chatInput=document.getElementById('chatInput');
+const sendBtn=document.getElementById('sendBtn');
+const chatSidebar=document.getElementById('chatSidebar');
+
+const suggestions=[
+  'Работодатель не выплатил мне зарплату',
+  'Мне отказали в возврате товара',
+  'Как расторгнуть договор?',
+  'Что делать, если нарушили мои права?'
+];
+
+function newChat(){
+  const id='c'+Date.now();
+  chats.unshift({id,title:'Новый диалог',messages:[]});
+  activeChatId=id;
+  persistChats();
+  renderChatHist();
+  renderChatThread();
+}
+function persistChats(){ store.set('lecodex_chats',chats.slice(0,30)); store.set('lecodex_active_chat',activeChatId); }
+function getActiveChat(){ return chats.find(c=>c.id===activeChatId); }
+
+function renderChatHist(){
+  const list=document.getElementById('chatHistList');
+  if(!chats.length){ list.innerHTML='<div class="profile-empty" style="padding:8px 10px;">Диалогов пока нет</div>'; return; }
+  list.innerHTML=chats.map(c=>`<button class="chat-hist-item ${c.id===activeChatId?'active':''}" data-id="${c.id}">${c.title}</button>`).join('');
+  list.querySelectorAll('[data-id]').forEach(b=>b.addEventListener('click',()=>{
+    activeChatId=b.dataset.id; persistChats(); renderChatHist(); renderChatThread(); chatSidebar.classList.remove('open');
+  }));
+}
+function renderChatThread(){
+  const c=getActiveChat();
+  if(!c || !c.messages.length){
+    chatInner.innerHTML=`<div class="chat-empty">
+      <div class="ill-panel"><img src="img/generating-response.svg" alt="" width="960" height="577"></div>
+      <h2>Чем помочь?</h2>
+      <p>Опишите ситуацию своими словами — LeCodex объяснит права и возможные шаги.</p>
+      <div class="suggest-grid" id="suggestGrid"></div>
+    </div>`;
+    const g=document.getElementById('suggestGrid');
+    g.innerHTML=suggestions.map(s=>`<button class="suggest-chip" data-s="${s.replace(/"/g,'&quot;')}">${s}</button>`).join('');
+    g.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{ chatInput.value=b.dataset.s; send(); }));
+    return;
+  }
+  chatInner.innerHTML=c.messages.map(m=>renderMsgHtml(m.role,m.text)).join('');
+  chatScroll.scrollTop=chatScroll.scrollHeight;
+}
+function renderMsgHtml(role,text){
+  const isUser=role==='user';
+  return `<div class="msg-row ${isUser?'user':'bot'}">
+    <div class="msg-avatar">${isUser?'Вы':'Lc'}</div>
+    <div class="msg-bubble">${escapeHtml(text).replace(/\n/g,'<br>')}</div>
+  </div>`;
+}
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+if(!chats.length || !activeChatId){ newChat(); } else { renderChatHist(); renderChatThread(); }
+
+document.getElementById('newChatBtn').addEventListener('click',newChat);
+document.getElementById('sidebarToggle').addEventListener('click',()=>chatSidebar.classList.toggle('open'));
+
+chatInput.addEventListener('input',()=>{ chatInput.style.height='auto'; chatInput.style.height=Math.min(chatInput.scrollHeight,140)+'px'; });
+chatInput.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); send(); } });
+sendBtn.addEventListener('click',()=>send());
+
+async function send(){
+  const text=chatInput.value.trim();
+  if(!text) return;
+  let c=getActiveChat();
+  if(!c){ newChat(); c=getActiveChat(); }
+  if(c.messages.length===0){ c.title=text.slice(0,34)+(text.length>34?'…':''); }
+  c.messages.push({role:'user',text});
+  persistChats(); renderChatHist(); renderChatThread();
+  chatInput.value=''; chatInput.style.height='auto'; sendBtn.disabled=true;
+
+  chatInner.insertAdjacentHTML('beforeend',`<div class="msg-row bot" id="typingRow"><div class="msg-avatar">Lc</div><div class="msg-bubble typing"><span class="typing-dots"><span></span><span></span><span></span></span></div></div>`);
+  chatScroll.scrollTop=chatScroll.scrollHeight;
+  const typingBubble=document.querySelector('#typingRow .msg-bubble');
+
+  if(!sample){ sample=await useClaude('sample'); }
+  if(!sample){
+    typingBubble.textContent='AI-консультант работает только на опубликованной странице (claude.ai), не в скачанном файле.';
+    typingBubble.classList.remove('typing');
+    sendBtn.disabled=false; return;
+  }
+  try{
+    const res=await sample([
+      {role:'user',content:'Ты — LeCodex, AI-помощник по общим правовым вопросам для пользователей из страны «'+(typeof aiProfile!=='undefined'?aiProfile.country:'Казахстан')+'». Отвечай простым языком, структурируй ответ строго в три части с такими заголовками: "Кратко:", "Что это значит:", "Что можно сделать:" (последнюю часть — маркированным списком из 2-4 шагов). В конце всегда коротко напомни, что это не юридическая консультация по делу и для конкретных действий нужен практикующий юрист. Вопрос пользователя: '+text}
+    ],{onText:({text:t})=>{ typingBubble.innerHTML=escapeHtml(t).replace(/\n/g,'<br>'); typingBubble.classList.remove('typing'); chatScroll.scrollTop=chatScroll.scrollHeight; }});
+    typingBubble.innerHTML=escapeHtml(res.text).replace(/\n/g,'<br>');
+    typingBubble.classList.remove('typing');
+    document.getElementById('typingRow').removeAttribute('id');
+    c.messages.push({role:'assistant',text:res.text});
+    persistChats();
+  }catch(e){
+    typingBubble.textContent='Не получилось получить ответ ('+(e&&e.code||'ошибка')+'). Попробуйте ещё раз.';
+    typingBubble.classList.remove('typing');
+  }
+  sendBtn.disabled=false;
+}
+
+/* ===================== DOCUMENTS ===================== */
+const templates=[
+  {id:'claim',name:'Исковое заявление',cat:'Суд',popular:true,desc:'Базовая форма для обращения в суд общей юрисдикции.',
+   fields:[
+     {k:'plaintiff',l:'Истец (ФИО)',step:1},{k:'defendant',l:'Ответчик (ФИО/организация)',step:1},
+     {k:'essence',l:'Суть требования',area:true,step:2},
+     {k:'court',l:'Название суда',step:3}],
+   gen:f=>`В ${f.court}\n\nИстец: ${f.plaintiff}\nОтветчик: ${f.defendant}\n\nИСКОВОЕ ЗАЯВЛЕНИЕ\n\n${f.essence}\n\nНа основании изложенного прошу суд рассмотреть настоящее заявление и удовлетворить заявленные требования.\n\nДата: _____________  Подпись: _____________`},
+  {id:'complaint',name:'Жалоба (претензия)',cat:'Претензии',popular:true,desc:'Досудебная претензия организации или должностному лицу.',
+   fields:[
+     {k:'from',l:'От кого (ФИО)',step:1},{k:'to',l:'Кому (организация/должность)',step:1},
+     {k:'essence',l:'Описание нарушения',area:true,step:2}],
+   gen:f=>`${f.to}\n\nот ${f.from}\n\nПРЕТЕНЗИЯ\n\n${f.essence}\n\nПрошу рассмотреть претензию и дать письменный ответ в установленный законом срок.\n\nДата: _____________  Подпись: _____________`},
+  {id:'poa',name:'Доверенность',cat:'Доверенности',popular:false,desc:'Простая письменная доверенность на представление интересов.',
+   fields:[
+     {k:'principal',l:'Доверитель (ФИО)',step:1},{k:'agent',l:'Представитель (ФИО)',step:1},
+     {k:'scope',l:'Полномочия',area:true,step:2},
+     {k:'validity',l:'Срок действия',step:3}],
+   gen:f=>`ДОВЕРЕННОСТЬ\n\nЯ, ${f.principal}, настоящей доверенностью уполномочиваю ${f.agent} на следующие действия:\n\n${f.scope}\n\nСрок действия доверенности: ${f.validity}.\n\nДата: _____________  Подпись: _____________`},
+  {id:'contract',name:'Договор оказания услуг',cat:'Договоры',popular:false,desc:'Упрощённый шаблон гражданско-правового договора.',
+   fields:[
+     {k:'party1',l:'Исполнитель',step:1},{k:'party2',l:'Заказчик',step:1},
+     {k:'subject',l:'Предмет договора',area:true,step:2},
+     {k:'price',l:'Стоимость',step:3}],
+   gen:f=>`ДОГОВОР ОКАЗАНИЯ УСЛУГ\n\nИсполнитель: ${f.party1}\nЗаказчик: ${f.party2}\n\n1. Предмет договора\n${f.subject}\n\n2. Стоимость услуг: ${f.price}\n\n3. Стороны несут ответственность в соответствии с действующим законодательством.\n\nПодписи сторон:\n_____________ / _____________`}
+];
+const docIcon='<svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7V3z"/><path d="M9 12h6M9 16h6"/></svg>';
+const categories=['Все',...Array.from(new Set(templates.map(t=>t.cat)))];
+let activeCat='Все', searchQ='';
+
+const docFilters=document.getElementById('docFilters');
+docFilters.innerHTML=categories.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`).join('');
+docFilters.addEventListener('click',e=>{
+  const b=e.target.closest('[data-cat]'); if(!b) return;
+  activeCat=b.dataset.cat;
+  docFilters.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.cat===activeCat));
+  renderDocs();
+});
+document.getElementById('docSearch').addEventListener('input',e=>{ searchQ=e.target.value.trim().toLowerCase(); renderDocs(); });
+
+function renderDocs(){
+  const grid=document.getElementById('docsGrid');
+  const filtered=templates.filter(t=>
+    (activeCat==='Все'||t.cat===activeCat) &&
+    (!searchQ || (t.name+' '+t.desc).toLowerCase().includes(searchQ))
+  );
+  if(!filtered.length){
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><div>Ничего не найдено. Попробуйте другой запрос.</div></div>`;
+    return;
+  }
+  grid.innerHTML=filtered.map(t=>`
+    <div class="doc-card">
+      <div class="doc-card-top">
+        <div class="doc-icon">${docIcon}</div>
+        ${t.popular?'<span class="popular-badge">Популярный</span>':''}
+      </div>
+      <div>
+        <h3>${t.name}</h3>
+        <div class="cat">${t.cat}</div>
+      </div>
+      <p>${t.desc}</p>
+      <div class="doc-actions">
+        <button class="icon-btn" data-preview="${t.id}" aria-label="Предпросмотр" title="Предпросмотр"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        <button class="btn sm" data-dl="${t.id}">Скачать бланк</button>
+        <button class="btn primary sm" data-wiz="${t.id}">Создать документ</button>
+      </div>
+    </div>`).join('');
+}
+renderDocs();
+
+document.getElementById('docsGrid').addEventListener('click',async e=>{
+  const dl=e.target.closest('[data-dl]');
+  const wiz=e.target.closest('[data-wiz]');
+  const prev=e.target.closest('[data-preview]');
+  if(dl){
+    const t=templates.find(x=>x.id===dl.dataset.dl);
+    const blank=t.gen(Object.fromEntries(t.fields.map(f=>[f.k,'________________'])));
+    if(!downloads) downloads=await useClaude('downloads');
+    if(downloads){ await downloads.save({filename:t.name+'.txt',data:blank}); }
+    else{ fallbackDownload(t.name+'.txt',blank); }
+  }
+  if(wiz){ openWizard(templates.find(x=>x.id===wiz.dataset.wiz)); }
+  if(prev){
+    const t=templates.find(x=>x.id===prev.dataset.preview);
+    const blank=t.gen(Object.fromEntries(t.fields.map(f=>[f.k,'________________'])));
+    openDocPreview(t.name,blank,null);
+  }
+});
+
+/* wizard: steps derived from field.step (1,2,3) + 4 preview + 5 download */
+function openWizard(t){
+  const backdrop=document.getElementById('modalBackdrop');
+  const box=document.getElementById('modalBox');
+  box.className='modal';
+  const data={};
+  let step=1;
+  const stepDefs=[
+    {n:1,label:'О сторонах',fields:t.fields.filter(f=>f.step===1)},
+    {n:2,label:'Суть ситуации',fields:t.fields.filter(f=>f.step===2)},
+    {n:3,label:'Дополнительные данные',fields:t.fields.filter(f=>f.step===3)},
+    {n:4,label:'Предпросмотр',fields:[]},
+    {n:5,label:'Скачать',fields:[]}
+  ].filter(s=>s.fields.length || s.n>=4);
+
+  function render(){
+    const idx=stepDefs.findIndex(s=>s.n===step);
+    box.innerHTML=`<div class="modal-head"><div><h2>${t.name}</h2><div class="sub">${t.desc}</div></div><button class="modal-close" id="wizClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="wiz-progress">${stepDefs.map((s,i)=>`<div class="wiz-dot ${i<idx?'done':i===idx?'current':''}"></div>`).join('')}</div>
+      <div class="wiz-step-label">Шаг ${idx+1} из ${stepDefs.length} · ${stepDefs[idx].label}</div>
+      <div id="wizBody"></div>
+      <div class="modal-actions">
+        <button class="btn" id="wizBack" ${idx===0?'style="visibility:hidden;"':''}>Назад</button>
+        <div class="right" id="wizNextWrap"></div>
+      </div>`;
+    box.querySelector('#wizClose').onclick=()=>backdrop.classList.add('hidden');
+    box.querySelector('#wizBack').onclick=()=>{ step=stepDefs[idx-1].n; render(); };
+    const body=box.querySelector('#wizBody');
+    const nextWrap=box.querySelector('#wizNextWrap');
+    const cur=stepDefs[idx];
+
+    if(cur.n<=3){
+      body.innerHTML=cur.fields.map(f=>`<div class="field"><label>${f.l}</label>${f.area?`<textarea rows="3" data-k="${f.k}">${data[f.k]||''}</textarea>`:`<input data-k="${f.k}" value="${data[f.k]||''}">`}</div>`).join('');
+      nextWrap.innerHTML=`<button class="btn primary" id="wizNext">Далее</button>`;
+      nextWrap.querySelector('#wizNext').onclick=()=>{
+        body.querySelectorAll('[data-k]').forEach(el=>data[el.dataset.k]=el.value);
+        const next=stepDefs[idx+1]; step=next.n; render();
+      };
+    } else if(cur.n===4){
+      t.fields.forEach(f=>{ if(!(f.k in data)) data[f.k]='________________'; });
+      const doc=t.gen(data);
+      body.innerHTML=`<div class="doc-page" style="padding:20px;font-size:12px;max-height:280px;overflow-y:auto;">${escapeHtml(doc)}</div>`;
+      nextWrap.innerHTML=`<button class="btn primary" id="wizNext">К скачиванию</button>`;
+      nextWrap.querySelector('#wizNext').onclick=()=>{ step=stepDefs[idx+1].n; render(); };
+    } else {
+      const doc=t.gen(data);
+      body.innerHTML=`<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;">Документ готов. Скачайте файл или откройте его в режиме предпросмотра для печати.</p>`;
+      nextWrap.innerHTML=`<button class="btn" id="wizPreview">Предпросмотр</button><button class="btn primary" id="wizSave">Скачать .txt</button>`;
+      nextWrap.querySelector('#wizPreview').onclick=()=>{ backdrop.classList.add('hidden'); openDocPreview(t.name,doc,t.id); };
+      nextWrap.querySelector('#wizSave').onclick=async()=>{
+        if(!downloads) downloads=await useClaude('downloads');
+        if(downloads) await downloads.save({filename:t.name+' — заполнено.txt',data:doc});
+        else fallbackDownload(t.name+' — заполнено.txt',doc);
+        saveDocToProfile(t.name,doc);
+      };
+    }
+  }
+  render();
+  backdrop.classList.remove('hidden');
+}
+
+function saveDocToProfile(name,text){
+  const docs=store.get('lecodex_saved_docs',[]);
+  docs.unshift({id:'d'+Date.now(),name,date:new Date().toLocaleDateString('ru-RU')});
+  store.set('lecodex_saved_docs',docs.slice(0,20));
+  renderProfile();
+}
+
+function openDocPreview(name,text,tplId){
+  const backdrop=document.getElementById('modalBackdrop');
+  const box=document.getElementById('modalBox');
+  box.className='modal wide';
+  box.innerHTML=`<div class="modal-head"><h2>${name}</h2><button class="modal-close" id="pvClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="doc-toolbar">
+      <button class="icon-btn" id="pvZoomOut" title="Уменьшить"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/></svg></button>
+      <button class="icon-btn" id="pvZoomIn" title="Увеличить"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+      <span class="spacer"></span>
+      <button class="icon-btn" id="pvCopy" title="Копировать"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="1.5"/><path d="M5 15V5a1 1 0 011-1h10"/></svg></button>
+      <button class="icon-btn" id="pvPrint" title="Печать"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a1 1 0 01-1-1v-5a1 1 0 011-1h16a1 1 0 011 1v5a1 1 0 01-1 1h-2"/><path d="M6 14h12v7H6z"/></svg></button>
+      <button class="btn primary sm" id="pvDownload">Скачать</button>
+    </div>
+    <div class="doc-page" id="pvPage" style="font-size:13px;">${escapeHtml(text)}</div>`;
+  backdrop.classList.remove('hidden');
+  let size=13;
+  box.querySelector('#pvClose').onclick=()=>{ backdrop.classList.add('hidden'); box.className='modal'; };
+  box.querySelector('#pvZoomIn').onclick=()=>{ size=Math.min(size+1,20); document.getElementById('pvPage').style.fontSize=size+'px'; };
+  box.querySelector('#pvZoomOut').onclick=()=>{ size=Math.max(size-1,10); document.getElementById('pvPage').style.fontSize=size+'px'; };
+  box.querySelector('#pvCopy').onclick=async()=>{ try{ await navigator.clipboard.writeText(text); box.querySelector('#pvCopy').style.color='var(--accent)'; setTimeout(()=>{box.querySelector('#pvCopy').style.color='';},1200);}catch(e){} };
+  box.querySelector('#pvPrint').onclick=()=>{ const w=window.open('','_blank'); w.document.write('<pre style="font-family:Georgia,serif;white-space:pre-wrap;padding:40px;">'+text.replace(/</g,'&lt;')+'</pre>'); w.document.close(); w.print(); };
+  box.querySelector('#pvDownload').onclick=async()=>{
+    if(!downloads) downloads=await useClaude('downloads');
+    if(downloads) await downloads.save({filename:name+'.txt',data:text});
+    else fallbackDownload(name+'.txt',text);
+    saveDocToProfile(name,text);
+  };
+}
+document.getElementById('modalBackdrop').addEventListener('click',e=>{ if(e.target.id==='modalBackdrop'){ e.target.classList.add('hidden'); document.getElementById('modalBox').className='modal'; } });
+
+/* ===================== LEARNING ===================== */
+const romans=['I','II','III','IV','V'];
+const courses=[
+ {id:'basics',title:'Основы права',meta:'2 урока · вводный',lessons:[
+   {title:'Источники и иерархия норм',text:'Все правовые нормы образуют систему с чёткой иерархией. На вершине — Конституция, ей не могут противоречить никакие другие акты. Ниже — законы, подзаконные акты (указы, постановления) и локальные документы организаций. Если нормы разных уровней расходятся, применяется та, что выше по иерархии.',
+    quiz:{q:'Что имеет высшую юридическую силу в правовой системе?',options:['Конституция','Приказ министерства','Локальный акт организации','Обычай делового оборота'],correct:0}},
+   {title:'Отрасли права',text:'Право делится на отрасли по предмету регулирования: гражданское — имущественные и личные отношения, уголовное — преступления и наказания, административное — отношения с госорганами, трудовое — отношения работника и работодателя. У каждой отрасли свой кодекс и своя логика.',
+    quiz:{q:'К какой отрасли относится регулирование трудовых отношений?',options:['Трудовое право','Уголовное право','Административное право','Семейное право'],correct:0}}
+ ]},
+ {id:'labor',title:'Трудовое право',meta:'2 урока · базовый',lessons:[
+   {title:'Трудовой договор',text:'Трудовой договор заключается в письменной форме и обязательно содержит: место работы, трудовую функцию, дату начала работы, условия оплаты труда и режим рабочего времени. Устные договорённости, не отражённые в договоре, доказать сложно — всегда проверяйте, что подписываете.',
+    quiz:{q:'Что обязательно должно быть указано в трудовом договоре?',options:['Размер оплаты труда','Хобби работника','Место жительства родителей','Личный номер телефона родственников'],correct:0}},
+   {title:'Увольнение и права работника',text:'При увольнении по инициативе работодателя (например, сокращение штата) закон требует заранее уведомить работника и выплатить выходное пособие. При увольнении по собственному желанию пособие обычно не полагается, но работодатель обязан выплатить всё заработанное и компенсацию за неиспользованный отпуск.',
+    quiz:{q:'В каком случае работодатель обязан выплатить выходное пособие?',options:['При сокращении штата','При увольнении по собственному желанию','При переводе в другой отдел','При выходе из отпуска'],correct:0}}
+ ]},
+ {id:'civil',title:'Гражданское право и сделки',meta:'2 урока · базовый',lessons:[
+   {title:'Договор: форма и условия',text:'У любого договора есть существенные условия — без них договор считается незаключённым. Главное из них — предмет договора: что именно передаётся, делается или оказывается. Остальные условия (цена, сроки) стороны могут согласовать дополнительно, но предмет обязателен всегда.',
+    quiz:{q:'Что относится к существенным условиям договора?',options:['Предмет договора','Цвет упаковки товара','Время года заключения','Имя курьера'],correct:0}},
+   {title:'Защита прав потребителей',text:'Потребитель вправе вернуть непродовольственный товар надлежащего качества в течение 14 дней, если он не подошёл по форме, размеру или комплектации и сохранил товарный вид. Есть и исключения — например, товары личной гигиены обмену не подлежат.',
+    quiz:{q:'В течение какого срока обычно можно вернуть непродовольственный товар надлежащего качества?',options:['14 дней','1 день','1 год','Возврат невозможен никогда'],correct:0}}
+ ]},
+ {id:'consumer',title:'Права потребителей',meta:'1 урок · практический',lessons:[
+   {title:'Возврат и обмен товара',text:'Если товар оказался ненадлежащего качества, потребитель вправе требовать замены, устранения недостатков или возврата денег. Срок предъявления требований — обычно в течение гарантийного срока, а если он не установлен — в разумный срок, но не более двух лет.',
+    quiz:{q:'Что вправе требовать потребитель при обнаружении недостатка товара?',options:['Замены или возврата денег','Только моральной компенсации','Ничего, если чек утерян','Только скидку 5%'],correct:0}}
+ ]},
+ {id:'gov',title:'Взаимодействие с госорганами',meta:'2 урока · практический',lessons:[
+   {title:'Как составить обращение',text:'Письменное обращение в госорган обязательно должно содержать ваши ФИО и адрес, по которому нужно направить ответ — без этого обращение вправе оставить без рассмотрения. Излагайте суть чётко, по пунктам, и прикладывайте копии подтверждающих документов, если они есть.',
+    quiz:{q:'Что обязательно нужно указать в письменном обращении в госорган?',options:['ФИО и адрес для ответа','Марку телефона','Любимый цвет','Дату рождения родственника'],correct:0}},
+   {title:'Сроки рассмотрения',text:'Стандартный срок рассмотрения письменного обращения граждан — 30 дней с момента регистрации. В отдельных случаях, требующих дополнительной проверки, срок могут продлить, но обязаны письменно уведомить вас об этом.',
+    quiz:{q:'Каков стандартный срок рассмотрения письменного обращения граждан?',options:['30 дней','3 дня','1 год','Срок не ограничен'],correct:0}}
+ ]}
+];
+function getProgress(){ return store.get('lecodex_progress',{}); }
+function setLessonDone(courseId,lessonIdx){
+  const p=getProgress(); if(!p[courseId]) p[courseId]=[];
+  if(!p[courseId].includes(lessonIdx)) p[courseId].push(lessonIdx);
+  store.set('lecodex_progress',p);
+}
+function courseProgress(c){ const p=getProgress(); const done=(p[c.id]||[]).length; return {done,total:c.lessons.length}; }
+
+const courseGrid=document.getElementById('courseGrid');
+function renderCourses(){
+  courseGrid.innerHTML=courses.map((c,ci)=>{
+    const {done,total}=courseProgress(c);
+    const pct=Math.round(done/total*100);
+    return `<div class="course-card" data-course="${c.id}">
+      <div class="course-card-top"><span class="course-num">${romans[ci]}</span>${done===total?'<span class="course-done-badge">Пройден</span>':''}</div>
+      <h3>${c.title}</h3>
+      <div class="meta">${c.meta}</div>
+      <div class="progress-bar"><div style="width:${pct}%;"></div></div>
+      <div class="progress-label">${done} из ${total} уроков</div>
+    </div>`;
+  }).join('');
+  courseGrid.querySelectorAll('[data-course]').forEach(card=>card.addEventListener('click',()=>openCourse(courses.find(c=>c.id===card.dataset.course))));
+}
+renderCourses();
+
+function openCourse(c){
+  const backdrop=document.getElementById('modalBackdrop');
+  const box=document.getElementById('modalBox');
+  box.className='modal';
+  const p=getProgress()[c.id]||[];
+  box.innerHTML=`<div class="modal-head"><h2>${c.title}</h2><button class="modal-close" id="courseClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="sub">${c.meta}</div>
+    <ul class="lesson-list">${c.lessons.map((l,i)=>`<li><button class="lesson-row ${p.includes(i)?'done':''}" data-i="${i}"><span class="lesson-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>${l.title}</button></li>`).join('')}</ul>`;
+  box.querySelector('#courseClose').onclick=()=>backdrop.classList.add('hidden');
+  box.querySelectorAll('[data-i]').forEach(btn=>btn.addEventListener('click',()=>openLesson(c,Number(btn.dataset.i))));
+  backdrop.classList.remove('hidden');
+}
+
+function openLesson(c,i){
+  const l=c.lessons[i];
+  const backdrop=document.getElementById('modalBackdrop');
+  const box=document.getElementById('modalBox');
+  box.className='modal';
+  box.innerHTML=`<div class="modal-head"><h2>${l.title}</h2><button class="modal-close" id="lsClose"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="lesson-text">${l.text}</p>
+    <div class="quiz-box"><div class="quiz-q">${l.quiz.q}</div>
+    <form id="quizForm">${l.quiz.options.map((o,oi)=>`<label class="quiz-opt"><input type="radio" name="opt" value="${oi}" required>${o}</label>`).join('')}
+    <div class="modal-actions"><span></span><div class="right"><button type="submit" class="btn primary">Проверить ответ</button></div></div></form>
+    <div id="quizResult"></div></div>`;
+  backdrop.classList.remove('hidden');
+  box.querySelector('#lsClose').onclick=()=>{ backdrop.classList.add('hidden'); renderCourses(); };
+  box.querySelector('#quizForm').onsubmit=ev=>{
+    ev.preventDefault();
+    const val=Number(new FormData(ev.target).get('opt'));
+    const ok=val===l.quiz.correct;
+    setLessonDone(c.id,i);
+    box.querySelector('#quizResult').innerHTML=`<div class="quiz-fb ${ok?'ok':'no'}">${ok?'Верно! ':'Не совсем — но урок засчитан. '}Правильный ответ: ${l.quiz.options[l.quiz.correct]}</div>`;
+    renderCourses(); renderProfile();
+  };
+}
+document.getElementById('modalBackdrop').addEventListener('click',e=>{ if(e.target.id==='modalBackdrop'){ renderCourses(); } });
+
+/* ===================== PROFILE SLIDE-OVER ===================== */
+const slideBackdrop=document.getElementById('slideBackdrop');
+const slidePanel=document.getElementById('slidePanel');
+function openProfile(){ renderProfile(); slideBackdrop.classList.add('open'); slidePanel.classList.add('open'); }
+function closeProfile(){ slideBackdrop.classList.remove('open'); slidePanel.classList.remove('open'); }
+document.getElementById('profileBtn').addEventListener('click',openProfile);
+document.getElementById('slideClose').addEventListener('click',closeProfile);
+slideBackdrop.addEventListener('click',closeProfile);
+
+function renderProfile(){
+  const pChats=document.getElementById('profileChats');
+  pChats.innerHTML=chats.slice(0,5).length ? chats.slice(0,5).map(c=>`<div class="profile-item">${c.title}</div>`).join('') : '<div class="profile-empty">Пока нет диалогов</div>';
+  const docs=store.get('lecodex_saved_docs',[]);
+  const pDocs=document.getElementById('profileDocs');
+  pDocs.innerHTML=docs.length ? docs.slice(0,5).map(d=>`<div class="profile-item">${d.name} · ${d.date}</div>`).join('') : '<div class="profile-empty">Пока нет сохранённых документов</div>';
+  const prog=getProgress();
+  let doneTotal=0, allTotal=0;
+  const lessonLines=[];
+  courses.forEach(c=>{
+    const done=(prog[c.id]||[]).length;
+    doneTotal+=done; allTotal+=c.lessons.length;
+    if(done) lessonLines.push(`${c.title}: ${done} из ${c.lessons.length}`);
+  });
+  const pLessons=document.getElementById('profileLessons');
+  pLessons.innerHTML=lessonLines.length ? lessonLines.map(t=>`<div class="profile-item">${t}</div>`).join('') : '<div class="profile-empty">Ещё не пройдено ни одного урока</div>';
+  const pct=allTotal?Math.round(doneTotal/allTotal*100):0;
+  document.getElementById('overallBar').style.width=pct+'%';
+  document.getElementById('overallLabel').textContent=`Общий прогресс обучения — ${pct}%`;
+}
+
+/* ===================== COMMAND PALETTE ===================== */
+const cmdkBackdrop=document.getElementById('cmdkBackdrop');
+const cmdkInput=document.getElementById('cmdkInput');
+const cmdkResults=document.getElementById('cmdkResults');
+let cmdkIndex=0, cmdkItems=[];
+
+function curCountryName(){ try{ return aiProfile.country||'Казахстан'; }catch(_){ return 'Казахстан'; } }
+function buildIndex(){
+  const items=[
+    {label:'Главная',tag:'Раздел',action:()=>goTo('home')},
+    {label:'AI-консультант',tag:'Раздел',action:()=>goTo('chat')},
+    {label:'Документы',tag:'Раздел',action:()=>goTo('documents')},
+    {label:'Обучение',tag:'Раздел',action:()=>goTo('learning')}
+  ];
+  templates.filter(t=>t.country===curCountryName()).forEach(t=>items.push({label:t.name,tag:'Документ',action:()=>{ goTo('documents'); setTimeout(()=>openWizard(t),150); }}));
+  courses.forEach(c=>items.push({label:c.title,tag:'Курс',action:()=>{ goTo('learning'); setTimeout(()=>openCourse(c),150); }}));
+  return items;
+}
+let allCmdkItems=buildIndex();
+
+function openCmdk(){ allCmdkItems=buildIndex(); cmdkBackdrop.classList.remove('hidden'); cmdkInput.value=''; cmdkInput.focus(); renderCmdk(''); }
+function closeCmdk(){ cmdkBackdrop.classList.add('hidden'); }
+function renderCmdk(q){
+  cmdkItems=allCmdkItems.filter(it=>it.label.toLowerCase().includes(q.toLowerCase()));
+  cmdkIndex=0;
+  if(!cmdkItems.length){ cmdkResults.innerHTML='<div class="cmdk-empty">Ничего не найдено</div>'; return; }
+  cmdkResults.innerHTML=cmdkItems.map((it,i)=>`<button class="cmdk-item ${i===0?'sel':''}" data-i="${i}">${it.label}<span class="cmdk-tag">${it.tag}</span></button>`).join('');
+  cmdkResults.querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>{ cmdkItems[Number(b.dataset.i)].action(); closeCmdk(); }));
+}
+cmdkInput.addEventListener('input',()=>renderCmdk(cmdkInput.value));
+cmdkInput.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){ e.preventDefault(); cmdkIndex=Math.min(cmdkIndex+1,cmdkItems.length-1); updateSel(); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); cmdkIndex=Math.max(cmdkIndex-1,0); updateSel(); }
+  else if(e.key==='Enter'){ if(cmdkItems[cmdkIndex]){ cmdkItems[cmdkIndex].action(); closeCmdk(); } }
+  else if(e.key==='Escape'){ closeCmdk(); }
+});
+function updateSel(){ cmdkResults.querySelectorAll('.cmdk-item').forEach((el,i)=>el.classList.toggle('sel',i===cmdkIndex)); const sel=cmdkResults.querySelector('.sel'); if(sel) sel.scrollIntoView({block:'nearest'}); }
+document.getElementById('cmdkOpenBtn').addEventListener('click',openCmdk);
+cmdkBackdrop.addEventListener('click',e=>{ if(e.target===cmdkBackdrop) closeCmdk(); });
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){ e.preventDefault(); openCmdk(); }
+});
+
+/* ===================== COUNTRIES ===================== */
+const countries=[
+ {flag:'🇰🇿',name:'Казахстан',tag:'Центральная Азия',system:'Континентальная правовая система',focus:'Конституция, кодексы и законы Республики Казахстан',url:'https://adilet.zan.kz/'},
+ {flag:'🇺🇸',name:'США',tag:'Северная Америка',system:'Федеральная система',focus:'Федеральные законы и отдельное законодательство штатов',url:'https://www.congress.gov/'},
+ {flag:'🇬🇧',name:'Великобритания',tag:'Европа',system:'Общее право',focus:'UK Public General Acts и иные виды законодательства',url:'https://www.legislation.gov.uk/'},
+ {flag:'🇨🇦',name:'Канада',tag:'Северная Америка',system:'Федеральная система',focus:'Федеральные Acts и regulations',url:'https://laws-lois.justice.gc.ca/eng/'},
+ {flag:'🇩🇪',name:'Германия',tag:'Европа',system:'Континентальная система',focus:'Федеральные законы и постановления',url:'https://www.gesetze-im-internet.de/'},
+ {flag:'🇫🇷',name:'Франция',tag:'Европа',system:'Континентальная система',focus:'Кодексы, законы и Journal officiel',url:'https://www.legifrance.gouv.fr/'},
+ {flag:'🇯🇵',name:'Япония',tag:'Азия',system:'Континентальная система',focus:'Национальные законы и нормативные акты',url:'https://elaws.e-gov.go.jp/'},
+ {flag:'🇦🇺',name:'Австралия',tag:'Океания',system:'Федеральная система',focus:'Commonwealth legislation и legislative instruments',url:'https://www.legislation.gov.au/'},
+ {flag:'🇸🇬',name:'Сингапур',tag:'Азия',system:'Общее право',focus:'Current Acts и subsidiary legislation',url:'https://sso.agc.gov.sg/'},
+ {flag:'🇦🇪',name:'ОАЭ',tag:'Ближний Восток',system:'Федеральная система',focus:'Федеральные законы и исполнительные регламенты',url:'https://uaelegislation.gov.ae/en'}
+];
+countries.push(
+ {flag:'🇷🇺',name:'Россия',tag:'Европа / Азия',system:'Континентальная правовая система',focus:'Федеральные конституционные законы, федеральные законы, указы Президента; официальное опубликование актов',url:'http://publication.pravo.gov.ru/'},
+ {flag:'🇨🇳',name:'Китай',tag:'Азия',system:'Система писаного права (континентального типа)',focus:'Законы ВСНП и её Постоянного комитета, административные регламенты, судебные толкования; юридически обязателен текст на китайском языке',url:'https://flk.npc.gov.cn/'},
+ {flag:'🇮🇳',name:'Индия',tag:'Азия',system:'Общее право',focus:'Центральные акты и акты штатов с подзаконными актами',url:'https://www.indiacode.nic.in/'},
+ {flag:'🇰🇷',name:'Южная Корея',tag:'Азия',system:'Континентальная система',focus:'Законы, указы, административные правила и судебная практика',url:'https://www.law.go.kr/LSW/eng/engMain.do'},
+ {flag:'🇧🇷',name:'Бразилия',tag:'Южная Америка',system:'Континентальная система, федерация',focus:'Федеральная конституция, кодексы, законы и декреты',url:'https://www.planalto.gov.br/legislacao'}
+);
+{const pri=['Казахстан','Россия','США','Китай'];
+ countries.sort((a,b)=>{const x=pri.indexOf(a.name),y=pri.indexOf(b.name);return (x<0?99:x)-(y<0?99:y);});}
+function renderCountries(){
+ const g=document.getElementById('countryGrid'); if(!g) return;
+ g.innerHTML=countries.map((c,i)=>`
+   <article class="country-card" data-country="${i}">
+    <div class="country-flag">${c.flag}</div>
+    <span class="country-tag">${c.tag}</span>
+    <h3>${c.name}</h3>
+    <p><b>${c.system}</b><br>${c.focus}</p>
+    <a href="${c.url}" target="_blank" rel="noopener">Официальный источник ↗</a>
+   </article>`).join('');
+ g.querySelectorAll('[data-country]').forEach(card=>card.addEventListener('click',e=>{
+   if(e.target.closest('a')) return;
+   const c=countries[Number(card.dataset.country)];
+   showCountry(c);
+ }));
+}
+function showCountry(c){
+ const backdrop=document.getElementById('modalBackdrop'), box=document.getElementById('modalBox');
+ box.className='modal wide-xl';
+ box.innerHTML=`<div class="modal-head"><div><h2>${c.flag} ${c.name}</h2><div class="sub">${c.system}</div></div><button class="modal-close" id="countryClose">×</button></div>
+ <div class="country-detail">
+  <div class="detail-box"><h4>Что искать</h4><p>${c.focus}</p></div>
+  <div class="detail-box"><h4>Источник</h4><p>Актуальную редакцию и изменения проверяйте на официальном правовом портале.</p></div>
+ </div>
+ <div class="modal-actions"><div></div><div class="right"><a class="btn primary" href="${c.url}" target="_blank" rel="noopener">Открыть портал</a></div></div>`;
+ backdrop.classList.remove('hidden');
+ document.getElementById('countryClose').onclick=()=>backdrop.classList.add('hidden');
+}
+renderCountries();
+
+/* ===================== MORE TEMPLATES ===================== */
+const extraTemplates=[
+ {id:'employment',name:'Трудовой договор',cat:'Договоры',popular:true,desc:'Расширенная основа договора между работником и работодателем.',
+  fields:[{k:'employer',l:'Работодатель',step:1},{k:'employee',l:'Работник',step:1},{k:'position',l:'Должность',step:2},{k:'salary',l:'Оплата труда',step:3}],
+  gen:f=>`ТРУДОВОЙ ДОГОВОР\n\nРаботодатель: ${f.employer}\nРаботник: ${f.employee}\n\nДолжность: ${f.position}\nОплата труда: ${f.salary}\n\nИные условия определяются сторонами и применимым законодательством.\n\nДата: __________  Подписи: __________`},
+ {id:'rent',name:'Договор аренды',cat:'Договоры',popular:false,desc:'Базовый шаблон аренды имущества между сторонами.',
+  fields:[{k:'landlord',l:'Арендодатель',step:1},{k:'tenant',l:'Арендатор',step:1},{k:'object',l:'Объект аренды',area:true,step:2},{k:'term',l:'Срок аренды',step:3}],
+  gen:f=>`ДОГОВОР АРЕНДЫ\n\nАрендодатель: ${f.landlord}\nАрендатор: ${f.tenant}\n\nОбъект: ${f.object}\nСрок: ${f.term}\n\nСтороны подтверждают согласие с условиями договора.\n\nДата: __________  Подписи: __________`},
+ {id:'privacy',name:'Запрос персональных данных',cat:'Запросы',popular:false,desc:'Запрос субъектом информации об обработке его персональных данных.',
+  fields:[{k:'from',l:'Заявитель',step:1},{k:'to',l:'Организация',step:1},{k:'request',l:'Что запросить',area:true,step:2}],
+  gen:f=>`${f.to}\n\nот ${f.from}\n\nЗАПРОС\n\nПрошу предоставить информацию по следующему вопросу:\n${f.request}\n\nПрошу направить ответ в установленном порядке.\n\nДата: __________  Подпись: __________`},
+ {id:'power',name:'Заявление в госорган',cat:'Заявления',popular:false,desc:'Универсальная основа обращения в государственный орган.',
+  fields:[{k:'agency',l:'Государственный орган',step:1},{k:'applicant',l:'Заявитель',step:1},{k:'issue',l:'Суть обращения',area:true,step:2}],
+  gen:f=>`${f.agency}\n\nот ${f.applicant}\n\nЗАЯВЛЕНИЕ\n\n${f.issue}\n\nПрошу рассмотреть обращение и предоставить ответ в установленном порядке.\n\nДата: __________  Подпись: __________`},
+ {id:'complaint-court',name:'Апелляционная жалоба',cat:'Суд',popular:false,desc:'Каркас жалобы на судебный акт; перед подачей требуется юридическая проверка.',
+  fields:[{k:'court',l:'Суд',step:1},{k:'appellant',l:'Заявитель',step:1},{k:'decision',l:'Какой акт обжалуется',step:2},{k:'grounds',l:'Основания жалобы',area:true,step:3}],
+  gen:f=>`В ${f.court}\n\nОт: ${f.appellant}\n\nАПЕЛЛЯЦИОННАЯ ЖАЛОБА\n\nОбжалуемый акт: ${f.decision}\n\nОснования:\n${f.grounds}\n\nПрошу рассмотреть жалобу в установленном порядке.\n\nДата: __________  Подпись: __________`},
+ {id:'nda',name:'Соглашение о конфиденциальности',cat:'Договоры',popular:false,desc:'Базовая структура NDA для согласования сторонами.',
+  fields:[{k:'party1',l:'Сторона 1',step:1},{k:'party2',l:'Сторона 2',step:1},{k:'info',l:'Конфиденциальная информация',area:true,step:2}],
+  gen:f=>`СОГЛАШЕНИЕ О КОНФИДЕНЦИАЛЬНОСТИ\n\nСторона 1: ${f.party1}\nСторона 2: ${f.party2}\n\nКонфиденциальная информация:\n${f.info}\n\nСтороны обязуются соблюдать согласованные условия конфиденциальности.\n\nДата: __________  Подписи: __________`}
+];
+templates.push(...extraTemplates);
+activeCat='Все';
+const newCategories=['Все',...Array.from(new Set(templates.map(t=>t.cat)))];
+docFilters.innerHTML=newCategories.map(c=>`<button class="chip ${c===activeCat?'active':''}" data-cat="${c}">${c}</button>`).join('');
+/* rebind after replacing chips */
+docFilters.onclick=null;
+docFilters.addEventListener('click',e=>{
+ const b=e.target.closest('[data-cat]'); if(!b)return;
+ activeCat=b.dataset.cat;
+ docFilters.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.cat===activeCat));
+ renderDocs();
+});
+renderDocs();
+
+/* Escape closes the top open modal */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  for(const id of ['pvClose','wizClose','countryClose','lsClose','courseClose','slideClose','aiClose']){
+    const b=document.getElementById(id);
+    if(b&&!b.closest('.hidden')&&getComputedStyle(b).visibility!=='hidden'&&b.offsetParent!==null){b.click();break;}
+  }
+});
+/* ===================== PERSONAL AI PROFILE ===================== */
+const aiProfile=store.get('lecodex_ai_profile',{country:'Казахстан',field:'Гражданское право',style:'Просто и по шагам'});
+function updateAiLabel(){
+ const el=document.getElementById('aiProfileLabel');
+ if(el) el.textContent=`${aiProfile.field} · ${aiProfile.country}`;
+}
+function openAiProfile(){
+ const backdrop=document.getElementById('modalBackdrop'), box=document.getElementById('modalBox');
+ box.className='modal';
+ box.innerHTML=`<div class="modal-head"><div><h2>Персональный профиль LeCodex</h2><div class="sub">Настройки сохраняются только в браузере.</div></div><button class="modal-close" id="aiClose">×</button></div>
+ <div class="field"><label>Страна</label><select id="aiCountry" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)">${countries.map(c=>`<option ${c.name===aiProfile.country?'selected':''}>${c.name}</option>`).join('')}</select></div>
+ <div class="field"><label>Основная область</label><select id="aiField" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)">${['Гражданское право','Трудовое право','Семейное право','Защита прав потребителей','Налоговое право','Административное право','Общее право'].map(x=>`<option ${x===aiProfile.field?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="field"><label>Стиль ответов</label><select id="aiStyle" style="width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)">${['Просто и по шагам','Кратко','Подробно с пояснениями'].map(x=>`<option ${x===aiProfile.style?'selected':''}>${x}</option>`).join('')}</select></div>
+ <div class="modal-actions"><div></div><div class="right"><button class="btn" id="aiCancel">Отмена</button><button class="btn primary" id="aiSave">Сохранить</button></div></div>`;
+ backdrop.classList.remove('hidden');
+ document.getElementById('aiClose').onclick=()=>backdrop.classList.add('hidden');
+ document.getElementById('aiCancel').onclick=()=>backdrop.classList.add('hidden');
+ document.getElementById('aiSave').onclick=()=>{
+   aiProfile.country=document.getElementById('aiCountry').value;
+   aiProfile.field=document.getElementById('aiField').value;
+   aiProfile.style=document.getElementById('aiStyle').value;
+   store.set('lecodex_ai_profile',aiProfile); updateAiLabel(); backdrop.classList.add('hidden');
+ };
+}
+document.getElementById('aiProfileBtn')?.addEventListener('click',openAiProfile);
+updateAiLabel();
+
+/* ===================== SCROLL REVEALS ===================== */
+const revealObserver=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+/* Personalized prompt: if a public /api/chat endpoint exists, use it. Otherwise keep existing Claude integration. */
+const originalSend=send;
+send=async function(){
+ const text=chatInput.value.trim();
+ if(!text)return;
+ /* The existing Claude path remains the fallback. Public deployment can provide /api/chat. */
+ const apiReady=location.protocol!=='file:' && location.pathname!=='';
+ if(apiReady){
+   let c=getActiveChat();
+   if(!c){newChat();c=getActiveChat();}
+   if(c.messages.length===0)c.title=text.slice(0,34)+(text.length>34?'…':'');
+   c.messages.push({role:'user',text});
+   persistChats();renderChatHist();renderChatThread();
+   chatInput.value='';chatInput.style.height='auto';sendBtn.disabled=true;
+   chatInner.insertAdjacentHTML('beforeend',`<div class="msg-row bot" id="typingRow"><div class="msg-avatar">Lc</div><div class="msg-bubble typing"><span class="typing-dots"><span></span><span></span><span></span></span></div></div>`);
+   chatScroll.scrollTop=chatScroll.scrollHeight;
+   const bubble=document.querySelector('#typingRow .msg-bubble');
+   try{
+     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+       message:text,history:c.messages.slice(-12),profile:aiProfile
+     })});
+     if(!r.ok)throw new Error('API '+r.status);
+     const data=await r.json();
+     const answer=data.answer||'Не удалось получить ответ.';
+     bubble.innerHTML=escapeHtml(answer).replace(/\n/g,'<br>');bubble.classList.remove('typing');
+     document.getElementById('typingRow')?.removeAttribute('id');
+     c.messages.push({role:'assistant',text:answer});persistChats();
+   }catch(err){
+     /* Fall back to the original integrated Claude connector if available. */
+     const hasClaude=typeof claude!=='undefined'&&claude?.use;
+     if(hasClaude){
+       try{
+         const fn=await claude.use('sample');
+         const res=await fn([{role:'user',content:`Ты — персональный LeCodex. Страна: ${aiProfile.country}. Область: ${aiProfile.field}. Стиль: ${aiProfile.style}. Отвечай на русском, не выдумывай нормы, отделяй общую информацию от юридического совета и указывай, когда нужна проверка актуального закона. Вопрос: ${text}`}]);
+         bubble.innerHTML=escapeHtml(res.text).replace(/\n/g,'<br>');bubble.classList.remove('typing');
+         document.getElementById('typingRow')?.removeAttribute('id');c.messages.push({role:'assistant',text:res.text});persistChats();
+       }catch(e){bubble.textContent='AI временно недоступен. Проверьте подключение серверного AI.';bubble.classList.remove('typing');}
+     }else{bubble.textContent='AI-сервер пока не подключён. Для публичной версии добавьте переменную GEMINI_API_KEY на Vercel.';bubble.classList.remove('typing');}
+   }
+   sendBtn.disabled=false; return;
+ }
+ return originalSend();
+};
+
+
+/* ===================== ANALYSIS (text + photo) ===================== */
+(function(){
+ const $=id=>document.getElementById(id);
+ const modes=[{id:'claim',l:'Иск / претензия'},{id:'contract',l:'Договор: риски'},{id:'photo',l:'Фото: документ, штраф, повестка'}];
+ let mode='claim', img=null;
+ function drawModes(){$('anModes').innerHTML=modes.map(m=>`<button class="chip ${m.id===mode?'active':''}" data-m="${m.id}">${m.l}</button>`).join('');}
+ $('anModes').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;mode=b.dataset.m;drawModes();});
+ drawModes();
+ function shrink(file){return new Promise((ok,bad)=>{
+  const r=new FileReader();r.onerror=bad;
+  r.onload=()=>{const im=new Image();im.onerror=bad;im.onload=()=>{
+   const k=Math.min(1,1600/Math.max(im.width,im.height));
+   const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+   c.getContext('2d').drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',.82));};
+   im.src=r.result;};
+  r.readAsDataURL(file);});}
+ async function pick(e){const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{img=await shrink(f);$('anPrev').src=img;$('anPrevWrap').style.display='flex';}
+  catch(_){alert('Не удалось прочитать фото. Попробуйте другое (JPEG или PNG).');}}
+ $('anCam').addEventListener('change',pick);$('anGal').addEventListener('change',pick);
+ $('anClear').addEventListener('click',()=>{img=null;$('anPrevWrap').style.display='none';});
+ function show(t,err){const o=$('anOut');o.style.display='block';
+  o.innerHTML=escapeHtml(t).replace(/^(Кратко:|Что нашёл:|Риски и ошибки:|Что делать:)/gm,'<b>$1</b>').replace(/\n/g,'<br>');
+  if(err)o.style.color='var(--danger)';else o.style.color='';}
+ $('anRun').addEventListener('click',async()=>{
+  const text=$('anText').value.trim();
+  if(mode==='photo'&&!img)return show('Добавьте фото документа.',true);
+  if(!text&&!img)return show('Вставьте текст или добавьте фото.',true);
+  const btn=$('anRun');btn.disabled=true;btn.textContent='Анализирую…';show('Читаю и проверяю документ…');
+  try{
+   const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({mode,text,image:img,profile:typeof aiProfile!=='undefined'?aiProfile:{}})});
+   const d=await r.json().catch(()=>({}));
+   if(!r.ok)throw new Error(d.error||('Ошибка '+r.status));
+   show(d.answer||'Пустой ответ. Попробуйте ещё раз.');
+  }catch(e){show('Не получилось: '+e.message,true);}
+  btn.disabled=false;btn.textContent='Проанализировать';
+ });
+})();
+
+/* ===================== COUNTRY SWITCH + TEMPLATES BY COUNTRY ===================== */
+(function(){
+ const NB='\u00A0', IND=NB.repeat(20);
+ const v=(x,n)=>(x&&String(x).trim())?String(x).trim():'_'.repeat(n||14);
+ const o=(x,d)=>(x&&String(x).trim())?String(x).trim():d;
+ const head=a=>a.map(l=>l===''?'':IND+l).join('\n');
+ const sign='Дата: «___» ____________ 20___ г.          Подпись: ______________ / ______________';
+ const num=a=>a.filter(Boolean).map((x,i)=>(i+1)+'. '+x).join('\n');
+ const lines=s=>String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ const F=(k,l,step,area)=>({k,l,step,area:!!area});
+
+ /* ---- Иск ---- */
+ const claimBody=(f,codeName,arts,att)=>[
+  'ИСК\nо взыскании денежных средств','',
+  'В чём нарушение прав и требования истца:\n'+v(f.essence,30),'',
+  'Обстоятельства, на которых основаны требования, и доказательства:\n'+v(f.facts,30),'',
+  'Правовое основание: '+v(f.law,20),'',
+  'Расчёт взыскиваемой суммы: '+v(f.calc,30),'',
+  'Сведения о досудебном порядке: '+v(f.pretrial,30),'',
+  ...(f.recon!==undefined?['Сведения о действиях по примирению: '+o(f.recon,'не предпринимались'),'']:[]),
+  'На основании изложенного, руководствуясь '+v(f.law,12)+', а также '+arts+' '+codeName+',','',
+  'ПРОШУ СУД:',
+  num(['Взыскать с ответчика '+v(f.dName,12)+' в пользу истца '+v(f.pName,12)+' денежные средства в размере '+v(f.amount,10)+'.',...lines(f.more),'Взыскать с ответчика судебные расходы, понесённые истцом (государственная пошлина и иные расходы).']),'',
+  'Приложения:',num(att),'',sign].join('\n');
+
+ const kzClaim={id:'kz-claim',country:'Казахстан',cat:'Суд',popular:true,name:'Иск о взыскании денежных средств',
+  desc:'Иск в суд первой инстанции со всеми обязательными сведениями.',src:'ГПК РК, ст. 148–149',
+  check:'Состав сведений и приложений сверен по тексту ст. 148–149 ГПК РК (01.11.2026). Перед подачей проверьте актуальную редакцию на adilet.zan.kz и подсудность. Государственную пошлину рассчитайте по Налоговому кодексу.',
+  fields:[F('court','Наименование суда',1),F('pName','Истец: ФИО (как в удостоверении личности)',1),F('pBirth','Истец: дата рождения',1),F('pIin','Истец: ИИН',1),F('pAddr','Истец: место жительства',1),F('pContact','Истец: телефон и электронный адрес',1),
+   F('dName','Ответчик: ФИО или полное наименование организации',1),F('dId','Ответчик: ИИН/БИН (если известен)',1),F('dAddr','Ответчик: место жительства или нахождения',1),F('dContact','Ответчик: телефон и e-mail (если известны)',1),
+   F('essence','В чём нарушены ваши права и что вы требуете',2,1),F('facts','Обстоятельства дела и доказательства (договор, расписка, переписка — что они подтверждают)',2,1),F('law','Норма закона, на которой основано требование (например: статья … ГК РК)',2),
+   F('amount','Цена иска (сумма)',3),F('calc','Расчёт взыскиваемой суммы',3,1),F('pretrial','Досудебный порядок: когда и как направили претензию, какой ответ получили',3,1),F('recon','Действия по примирению (если были)',3),F('more','Дополнительные требования (неустойка, проценты) — только если есть основание в договоре или законе; каждое с новой строки',3,1),F('extra','Другие приложения (каждое с новой строки)',3,1)],
+  gen:f=>head(['В '+v(f.court,24),'','Истец: '+v(f.pName),'Дата рождения: '+v(f.pBirth,10),'ИИН: '+v(f.pIin,12),'Место жительства: '+v(f.pAddr,22),'Тел./e-mail: '+v(f.pContact,16),'','Ответчик: '+v(f.dName),'ИИН/БИН: '+o(f.dId,'не известен'),'Место жительства/нахождения: '+v(f.dAddr,22),'Тел./e-mail: '+o(f.dContact,'не известны'),'','Цена иска: '+v(f.amount,10)])+'\n\n'+
+   claimBody(f,'Гражданского процессуального кодекса Республики Казахстан','статьями 148, 149',
+   ['Копия иска и приложенных документов по числу ответчиков и третьих лиц','Документ, подтверждающий уплату государственной пошлины (либо ходатайство об отсрочке)','Документы, подтверждающие обстоятельства, на которых основаны требования','Документы, подтверждающие соблюдение досудебного порядка (претензия и доказательства её направления)',...lines(f.extra)])};
+
+ const ruClaim={id:'ru-claim',country:'Россия',cat:'Суд',popular:true,name:'Исковое заявление о взыскании денежных средств',
+  desc:'Исковое заявление в суд общей юрисдикции со всеми обязательными сведениями.',src:'ГПК РФ, ст. 131–132',
+  check:'Структура составлена по ст. 131–132 ГПК РФ. Перед подачей сверьте актуальную редакцию на pravo.gov.ru, проверьте подсудность и размер госпошлины на сайте вашего суда.',
+  fields:[F('court','Наименование суда',1),F('pName','Истец: ФИО',1),F('pBirth','Истец: дата и место рождения',1),F('pId','Истец: один из идентификаторов (СНИЛС или ИНН)',1),F('pAddr','Истец: место жительства или пребывания',1),F('pContact','Истец: телефон и электронная почта',1),
+   F('dName','Ответчик: ФИО или полное наименование организации',1),F('dData','Ответчик: дата и место рождения, идентификатор (если известны)',1),F('dAddr','Ответчик: место жительства или нахождения',1),F('dContact','Ответчик: телефон и e-mail (если известны)',1),
+   F('essence','В чём нарушены ваши права и что вы требуете',2,1),F('facts','Обстоятельства дела и доказательства (договор, расписка, переписка — что они подтверждают)',2,1),F('law','Норма закона, на которой основано требование (например: статья … ГК РФ)',2),
+   F('amount','Цена иска (сумма)',3),F('calc','Расчёт взыскиваемой суммы',3,1),F('pretrial','Досудебный порядок: направляли ли претензию, когда и какой ответ',3,1),F('more','Дополнительные требования (проценты, неустойка) — только если есть основание в договоре или законе; каждое с новой строки',3,1),F('extra','Другие приложения (каждое с новой строки)',3,1)],
+  gen:f=>head(['В '+v(f.court,24),'','Истец: '+v(f.pName),'Дата и место рождения: '+v(f.pBirth,16),'Идентификатор (СНИЛС/ИНН): '+v(f.pId,12),'Место жительства: '+v(f.pAddr,22),'Тел./e-mail: '+v(f.pContact,16),'','Ответчик: '+v(f.dName),'Дата и место рождения, идентификатор: '+o(f.dData,'не известны'),'Место жительства/нахождения: '+v(f.dAddr,22),'Тел./e-mail: '+o(f.dContact,'не известны'),'','Цена иска: '+v(f.amount,10)])+'\n\n'+
+   claimBody(f,'Гражданского процессуального кодекса Российской Федерации','статьями 131, 132',
+   ['Документ, подтверждающий уплату государственной пошлины','Документы, подтверждающие обстоятельства, на которых основаны требования','Документы, подтверждающие направление ответчику копий иска и приложенных документов (квитанция, опись вложения)','Документы о соблюдении досудебного порядка (претензия и доказательства её направления)',...lines(f.extra)])};
+
+ /* ---- Претензия ---- */
+ const pretFields=(idL)=>[F('toName','Кому: наименование организации или ФИО',1),F('toAddr','Адрес адресата',1),F('fromName','От кого: ФИО',1),F('fromId',idL,1),F('fromAddr','Ваш адрес',1),F('fromContact','Ваш телефон и e-mail',1),
+  F('contract','Основание требования: договор или иная сделка (название, дата, номер)',2),F('essence','Что нарушил адресат, когда и как',2,1),F('demand','Что вы требуете (с суммами)',2,1),
+  F('deadline','Срок исполнения (по договору или закону; если не установлен — разумный срок)',3),F('method','Как направляете (заказное письмо с уведомлением, e-mail, лично под подпись)',3),F('extra','Приложения (каждое с новой строки)',3,1)];
+ const pretGen=(idN)=>f=>head(['Кому: '+v(f.toName),'Адрес: '+v(f.toAddr,22),'','От кого: '+v(f.fromName),idN+': '+v(f.fromId,12),'Адрес: '+v(f.fromAddr,22),'Тел./e-mail: '+v(f.fromContact,16)])+'\n\n'+
+  ['ПРЕТЕНЗИЯ\n(досудебное требование)','','Основание: '+v(f.contract,24),'','Обстоятельства нарушения:\n'+v(f.essence,30),'','На основании изложенного ТРЕБУЮ:\n'+v(f.demand,30),'','Прошу исполнить требование в срок до '+v(f.deadline,14)+'.','','Если требование не будет исполнено в указанный срок, я буду вынужден(-а) обратиться в суд с иском о защите нарушенных прав и взыскании судебных расходов.','','Письменный ответ прошу направить по адресу, указанному выше.','','Способ направления претензии: '+v(f.method,20),'','Приложения:',num(['Копия договора (иного документа, на котором основано требование)','Документы, подтверждающие нарушение',...lines(f.extra)]),'',sign].join('\n');
+ const kzPret={id:'kz-pret',country:'Казахстан',cat:'Претензии',popular:false,name:'Досудебная претензия',desc:'Требование к контрагенту до обращения в суд.',src:'ГПК РК, ст. 148 и 149',
+  check:'Единого официального бланка нет. Структура рассчитана на то, чтобы подтвердить досудебный порядок, который суд проверяет по ст. 148–149 ГПК РК. Сохраните доказательства отправки. Если закон или договор устанавливает свой порядок, соблюдайте его.',
+  fields:pretFields('От кого: ИИН'),gen:pretGen('ИИН')};
+ const ruPret={id:'ru-pret',country:'Россия',cat:'Претензии',popular:false,name:'Досудебная претензия',desc:'Требование к контрагенту до обращения в суд.',src:'ГПК РФ, ст. 131–132',
+  check:'Единого официального бланка нет. По части споров досудебный порядок обязателен по закону, по остальным его может установить договор; суд проверяет это по ст. 131–132 ГПК РФ. Сохраните доказательства отправки.',
+  fields:pretFields('От кого: ИНН (по желанию)'),gen:pretGen('ИНН')};
+
+ /* ---- Доверенность ---- */
+ const poaFields=(idDoc)=>[F('city','Город, где составляется доверенность',1),F('pName','Доверитель: ФИО',1),F('pBirth','Доверитель: дата рождения',1),F('pDoc','Доверитель: '+idDoc,1),F('pAddr','Доверитель: место жительства',1),
+  F('aName','Представитель: ФИО',1),F('aBirth','Представитель: дата рождения',1),F('aDoc','Представитель: '+idDoc,1),F('aAddr','Представитель: место жительства',1),
+  F('scope','В каких судах и по какому делу представлять (например: в районном суде по иску к … о взыскании …)',2,1),F('special','Особые полномочия (отказ от иска, признание иска, мировое соглашение, получение присуждённого) — перечислите только то, что реально передаёте',2,1),F('term','Срок действия',3)];
+ const poaGen=f=>[ 'ДОВЕРЕННОСТЬ','','г. '+v(f.city,10)+'                              «___» ____________ 20___ г.','',
+  'Я, '+v(f.pName)+', '+v(f.pBirth,10)+' года рождения, '+v(f.pDoc,20)+', проживающий(-ая) по адресу: '+v(f.pAddr,22)+', настоящей доверенностью уполномочиваю '+v(f.aName)+', '+v(f.aBirth,10)+' года рождения, '+v(f.aDoc,20)+', проживающего(-ую) по адресу: '+v(f.aAddr,22)+', представлять мои интересы '+v(f.scope,30)+', со следующими полномочиями:','',
+  num(['подписывать и подавать в суд исковые заявления, заявления, ходатайства, отзывы и жалобы','знакомиться с материалами дела, делать выписки и копии','участвовать в судебных заседаниях, давать объяснения, заявлять ходатайства и отводы','представлять доказательства и участвовать в их исследовании','получать копии судебных актов','обжаловать судебные акты',...lines(f.special)]),'',
+  'Срок действия доверенности: '+v(f.term,14)+'.','','Подпись доверителя: ______________ / '+v(f.pName,14)+' /'].join('\n');
+ const kzPoa={id:'kz-poa',country:'Казахстан',cat:'Доверенности',popular:false,name:'Доверенность на представителя в суде',desc:'Доверенность с полномочиями на подписание и подачу иска.',src:'ГПК РК, ст. 148 и 149',
+  check:'Иск подписывается представителем только при наличии такого полномочия (ст. 148 ГПК РК), оно включено в текст. Требования к удостоверению доверенности уточните у нотариуса или в суде.',fields:poaFields('удостоверение личности (номер, кем и когда выдано)'),gen:poaGen};
+ const ruPoa={id:'ru-poa',country:'Россия',cat:'Доверенности',popular:false,name:'Доверенность на представителя в суде',desc:'Доверенность с полномочиями на подписание и подачу иска.',src:'ГПК РФ, ст. 53–54',
+  check:'Полномочия на подписание иска и его подачу должны быть специально оговорены в доверенности (ст. 54 ГПК РФ), они включены в текст. Нужно ли нотариальное удостоверение, уточните у нотариуса или в суде.',fields:poaFields('паспорт (серия, номер, кем и когда выдан)'),gen:poaGen};
+
+ templates.length=0; templates.push(kzClaim,kzPret,kzPoa,ruClaim,ruPret,ruPoa);
+ const READY=[...new Set(templates.map(t=>t.country))];
+
+ /* ---- country switch ---- */
+ const cur=()=>(typeof aiProfile!=='undefined'&&aiProfile.country)||'Казахстан';
+ const sel=document.getElementById('countrySel');
+ sel.innerHTML=countries.map(c=>`<option value="${c.name}">${c.flag} ${c.name}</option>`).join('');
+ sel.addEventListener('change',()=>{aiProfile.country=sel.value;store.set('lecodex_ai_profile',aiProfile);updateAiLabel();});
+ function setCountry(n){aiProfile.country=n;store.set('lecodex_ai_profile',aiProfile);updateAiLabel();}
+ const baseLabel=updateAiLabel;
+ updateAiLabel=function(){baseLabel();sel.value=cur();rebuildDocs();};
+
+ function rebuildDocs(){
+  const list=templates.filter(t=>t.country===cur());
+  activeCat='Все';
+  docFilters.innerHTML=['Все',...new Set(list.map(t=>t.cat))].map(c=>`<button class="chip ${c==='Все'?'active':''}" data-cat="${c}">${c}</button>`).join('');
+  renderDocs();
+ }
+ renderDocs=function(){
+  const grid=document.getElementById('docsGrid'),c=cur(),bar=document.getElementById('docCountryBar');
+  const all=templates.filter(t=>t.country===c);
+  bar.innerHTML=all.length?`<div><b>${c}</b>: шаблонов — ${all.length}. Каждый составлен по процессуальному кодексу страны, источник указан в карточке. Перед подачей в суд проверьте актуальную редакцию закона и требования вашего суда.</div>`
+   :`<div>Для страны «<b>${c}</b>» шаблоны сейчас проходят проверку по официальным источникам. Непроверенные документы мы не публикуем. Уже доступны: ${READY.map(n=>`<a href="#" data-setc="${n}">${n}</a>`).join(', ')}.</div>`;
+  if(!all.length){grid.innerHTML='';return;}
+  const list=all.filter(t=>(activeCat==='Все'||t.cat===activeCat)&&(!searchQ||(t.name+' '+t.desc).toLowerCase().includes(searchQ)));
+  if(!list.length){grid.innerHTML='<div class="empty-state" style="grid-column:1/-1;"><div>Ничего не найдено.</div></div>';return;}
+  grid.innerHTML=list.map(t=>`<div class="doc-card"><div class="doc-card-top"><div class="doc-icon">${docIcon}</div>${t.popular?'<span class="popular-badge">Популярный</span>':''}</div>
+   <div><h3>${t.name}</h3><div class="cat">${t.cat} · ${t.src}</div></div><p>${t.desc}</p><p style="font-size:11.5px;color:var(--ink-faint);">${t.check}</p>
+   <div class="doc-actions"><button class="icon-btn" data-preview="${t.id}" aria-label="Предпросмотр" title="Предпросмотр"><svg viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="btn sm" data-dl="${t.id}">Скачать бланк</button><button class="btn primary sm" data-wiz="${t.id}">Создать документ</button></div></div>`).join('');
+ };
+ document.getElementById('docCountryBar').addEventListener('click',e=>{const a=e.target.closest('[data-setc]');if(a){e.preventDefault();setCountry(a.dataset.setc);}});
+ sel.value=cur(); rebuildDocs();
+})();
+
+/* ===================== WAVE 2: MORE TEMPLATES + WIZARD V2 ===================== */
+(function(){
+ const NB='\u00A0', IND=NB.repeat(20);
+ const v=(x,n)=>(x&&String(x).trim())?String(x).trim():'_'.repeat(n||14);
+ const o=(x,d)=>(x&&String(x).trim())?String(x).trim():d;
+ const head=a=>a.map(l=>l===''?'':IND+l).join('\n');
+ const sign='Дата: «___» ____________ 20___ г.          Подпись: ______________ / ______________';
+ const num=a=>a.filter(Boolean).map((x,i)=>(i+1)+'. '+x).join('\n');
+ const lines=s=>String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ const F=(k,l,step,area)=>({k,l,step,area:!!area});
+ const base=idL=>[F('court','Наименование суда',1),F('caseNo','Номер дела (если дело возбуждено; иначе напишите «подаётся вместе с иском»)',1),F('pName','Заявитель (истец): ФИО',1),F('pId',idL,1),F('pAddr','Заявитель: место жительства',1),F('pContact','Заявитель: телефон и электронный адрес',1),F('dName','Ответчик: ФИО или наименование организации',1),F('dAddr','Ответчик: место жительства или нахождения',1)];
+ const hdr=(f,idN)=>head(['В '+v(f.court,24),'Дело № '+v(f.caseNo,12),'','Заявитель (истец): '+v(f.pName),idN+': '+v(f.pId,12),'Адрес: '+v(f.pAddr,22),'Тел./e-mail: '+v(f.pContact,16),'','Ответчик: '+v(f.dName),'Адрес: '+v(f.dAddr,22)])+'\n\n';
+ const T=(id,country,cat,name,desc,src,check,fields,gen)=>({id,country,cat,popular:false,name,desc,src,check,fields,gen});
+
+ /* обеспечение иска */
+ const secF=idL=>[...base(idL),F('claim','О чём иск (кратко) и цена иска',2,1),F('why','Почему без мер обеспечения исполнить решение будет затруднительно или невозможно (конкретные факты)',2,1),F('measure','Какие меры просите принять (например: арест имущества ответчика на сумму …; запрет совершать определённые действия)',2,1),F('propInfo','Сведения об имуществе или счетах ответчика (если известны)',3,1),F('extra','Другие приложения (каждое с новой строки)',3,1)];
+ const secG=(code,arts,idN)=>f=>hdr(f,idN)+['ЗАЯВЛЕНИЕ\nоб обеспечении иска','','Заявитель обратился в суд с иском: '+v(f.claim,30)+'.','','Непринятие мер по обеспечению иска может затруднить или сделать невозможным исполнение решения суда по следующим причинам:\n'+v(f.why,30),'','Сведения об имуществе ответчика: '+o(f.propInfo,'не известны'),'','На основании изложенного, руководствуясь '+arts+' '+code+',','','ПРОШУ СУД:','Принять меры по обеспечению иска: '+v(f.measure,30)+'.','','Приложения:',num(['Копия иска (если иск подаётся одновременно с заявлением)','Документы, подтверждающие доводы заявления',...lines(f.extra)]),'',sign].join('\n');
+ /* истребование доказательств */
+ const evF=idL=>[...base(idL),F('claim','О чём иск (кратко)',2,1),F('holder','У кого находятся доказательства (наименование, адрес)',2),F('docs','Что истребовать (документы с датами и номерами)',2,1),F('facts','Какие обстоятельства они подтверждают',2,1),F('why','Почему вы не можете получить их самостоятельно (обращались ли, какой ответ)',3,1),F('where','Место нахождения доказательств',3),F('extra','Приложения (каждое с новой строки)',3,1)];
+ const evG=(arts,idN)=>f=>hdr(f,idN)+['ХОДАТАЙСТВО\nоб истребовании доказательств','','В производстве суда находится дело по иску: '+v(f.claim,30)+'.','','Для подтверждения обстоятельств дела необходимо истребовать у '+v(f.holder,20)+' следующие доказательства:\n'+v(f.docs,30),'','Обстоятельства, которые могут быть подтверждены этими доказательствами:\n'+v(f.facts,30),'','Причины, по которым я не могу получить их самостоятельно:\n'+v(f.why,30),'','Место нахождения доказательств: '+v(f.where,20)+'.','','На основании изложенного, руководствуясь '+arts+',','','ПРОШУ СУД:','Истребовать у указанного лица перечисленные доказательства и приобщить их к материалам дела.','','Приложения:',num(['Документы, подтверждающие обращение за доказательствами и ответ (если были)',...lines(f.extra)]),'',sign].join('\n');
+ /* отсрочка госпошлины */
+ const feeF=idL=>[...base(idL),F('claim','О чём иск (кратко) и цена иска',2,1),F('fee','Размер государственной пошлины',2),F('reason','Почему не можете уплатить пошлину сразу',2,1),F('status','Имущественное положение: доходы, обязательства, иждивенцы',3,1),F('period','На какой срок просите отсрочку (рассрочку)',3),F('extra','Другие приложения (каждое с новой строки)',3,1)];
+ const feeG=(legal,idN)=>f=>hdr(f,idN)+['ХОДАТАЙСТВО\nоб отсрочке (рассрочке) уплаты государственной пошлины','','Я подаю в суд иск: '+v(f.claim,30)+'. Размер государственной пошлины: '+v(f.fee,10)+'.','','Уплатить пошлину в полном объёме единовременно я не могу по следующим причинам:\n'+v(f.reason,30),'','Сведения об имущественном положении:\n'+v(f.status,30),'','На основании изложенного, руководствуясь '+legal+',','','ПРОШУ СУД:','Предоставить отсрочку (рассрочку) уплаты государственной пошлины на срок: '+v(f.period,14)+'.','','Приложения:',num(['Документы, подтверждающие имущественное положение (справки о доходах и составе семьи, выписки по счетам)',...lines(f.extra)]),'',sign].join('\n');
+
+ const KZc='Гражданского процессуального кодекса Республики Казахстан', RUc='Гражданского процессуального кодекса Российской Федерации';
+ templates.push(
+  T('kz-sec','Казахстан','Суд','Заявление об обеспечении иска','Просьба к суду принять меры, чтобы решение можно было исполнить.','ГПК РК, ст. 155–157','Сверено по ст. 155–157 ГПК РК (01.11.2026): меры должны быть соразмерны требованию, заявление рассматривается без вызова сторон, а если оно подано с иском, разрешается в день возбуждения дела. Перечень мер — ст. 156.',secF('Заявитель: ИИН'),secG(KZc,'статьями 155–157','ИИН')),
+  T('kz-ev','Казахстан','Ходатайства','Ходатайство об истребовании доказательств','Просьба обязать другую сторону или третье лицо представить документы.','ГПК РК, ст. 149','Ходатайство истца об истребовании доказательств, которые находятся у ответчика или третьего лица, прямо указано среди приложений к иску (ст. 149 ГПК РК, сверено 01.11.2026). Проверьте актуальную редакцию на adilet.zan.kz.',evF('Заявитель: ИИН'),evG('статьёй 149 '+KZc,'ИИН')),
+  T('kz-fee','Казахстан','Ходатайства','Ходатайство об отсрочке уплаты госпошлины','Просьба отложить уплату госпошлины при тяжёлом имущественном положении.','ГПК РК, ст. 149','Возможность такого ходатайства указана в ст. 149 ГПК РК (сверено 01.11.2026); основания и порядок определяет Налоговый кодекс РК. Проверьте их на adilet.zan.kz и приложите подтверждающие документы.',feeF('Заявитель: ИИН'),feeG('статьёй 149 '+KZc+' и Налоговым кодексом Республики Казахстан','ИИН')),
+  T('ru-sec','Россия','Суд','Заявление об обеспечении иска','Просьба к суду принять меры, чтобы решение можно было исполнить.','ГПК РФ, ст. 139–141','Составлено по ст. 139–141 ГПК РФ. Сверьте актуальную редакцию на pravo.gov.ru. Суд может потребовать от истца встречное обеспечение.',secF('Заявитель: СНИЛС или ИНН'),secG(RUc,'статьями 139–141','СНИЛС/ИНН')),
+  T('ru-ev','Россия','Ходатайства','Ходатайство об истребовании доказательств','Просьба обязать другую сторону или третье лицо представить документы.','ГПК РФ, ст. 57','Содержание соответствует ст. 57 ГПК РФ: какие обстоятельства подтверждаются, почему нельзя получить доказательства самостоятельно, где они находятся. Сверьте актуальную редакцию на pravo.gov.ru.',evF('Заявитель: СНИЛС или ИНН'),evG('статьёй 57 '+RUc,'СНИЛС/ИНН')),
+  T('ru-fee','Россия','Ходатайства','Ходатайство об отсрочке (рассрочке) уплаты госпошлины','Просьба отложить или разделить уплату госпошлины.','НК РФ, ст. 333.41','Основания отсрочки и рассрочки — ст. 333.41 НК РФ. Сверьте актуальную редакцию на pravo.gov.ru и приложите документы о доходах.',feeF('Заявитель: СНИЛС или ИНН'),feeG('статьёй 333.41 Налогового кодекса Российской Федерации','СНИЛС/ИНН'))
+ );
+
+ /* ---------- export helpers ---------- */
+ const esc=x=>String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ const ea=x=>esc(x).replace(/"/g,'&quot;');
+ function toHtml(name,text){
+  let out='',cn=false;
+  for(const l of text.split('\n')){
+   const t=l.trim();
+   if(!t){out+='<p>&nbsp;</p>';cn=false;continue;}
+   if(l.startsWith(IND)){out+=`<p style="margin:0 0 0 50%;text-align:left">${esc(t)}</p>`;continue;}
+   const caps=t.length<70&&/[А-ЯЁ]{3}/.test(t)&&t===t.toUpperCase();
+   if(caps){out+=`<p style="text-align:center"><b>${esc(t)}</b></p>`;cn=true;}
+   else if(cn){out+=`<p style="text-align:center">${esc(t)}</p>`;}
+   else out+=`<p style="text-align:justify;text-indent:1.25cm">${esc(t)}</p>`;
+  }
+  return `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${esc(name)}</title><style>@page{size:A4;margin:2cm 1.5cm 2cm 3cm}body{font-family:'Times New Roman',serif;font-size:14pt}p{margin:0 0 6pt;line-height:1.3}</style></head><body>${out}</body></html>`;
+ }
+ function saveBlob(name,data,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+data],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();}
+
+ /* ---------- wizard v2 ---------- */
+ openWizard=function(t){
+  const bd=document.getElementById('modalBackdrop'),box=document.getElementById('modalBox');
+  box.className='modal wide';
+  const key='lecodex_draft_'+t.id; let data={};
+  try{data=JSON.parse(localStorage.getItem(key)||'{}')||{};}catch(_){}
+  const restored=Object.values(data).some(x=>String(x).trim());
+  const isOpt=f=>/\(если|по желанию|только если/i.test(f.l)||['extra','more','special','caseNo'].includes(f.k);
+  const req=t.fields.filter(f=>!isOpt(f));
+  const groups=[[1,'Стороны и суд'],[2,'Суть'],[3,'Дополнительно']];
+  box.innerHTML=`<div class="modal-head"><div><h2>${t.name}</h2><div class="sub">${t.src}</div></div><button class="modal-close" id="wizClose" aria-label="Закрыть">×</button></div>
+   <p style="font-size:12px;color:var(--ink-soft);line-height:1.5;margin:0 0 12px;">${t.check}</p>
+   ${restored?'<div style="font-size:12px;color:var(--accent-dim);margin-bottom:8px;">Черновик восстановлен. Он хранится только в вашем браузере.</div>':''}
+   <div id="wzBarTxt" style="font-size:12.5px;font-weight:600;margin-bottom:6px;"></div>
+   <div class="progress-bar" style="margin-bottom:16px;"><div id="wzBar" style="width:0%;"></div></div>
+   ${groups.map(([n,l])=>{const fs=t.fields.filter(f=>f.step===n);return fs.length?`<h4 style="margin:14px 0 8px;font-size:13px;">${l}</h4>`+fs.map(f=>`<div class="field"><label>${f.l}${isOpt(f)?' <span style="font-weight:400;color:var(--ink-faint)">· по желанию</span>':''}</label>${f.area?`<textarea rows="3" data-k="${f.k}">${esc(data[f.k]||'')}</textarea>`:`<input data-k="${f.k}" value="${ea(data[f.k]||'')}">`}</div>`).join(''):'';}).join('')}
+   <h4 style="margin:18px 0 8px;font-size:13px;">Предпросмотр</h4>
+   <div class="doc-page" id="wzPrev" style="padding:20px;font-size:12px;white-space:pre-wrap;max-height:300px;overflow:auto;"></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+    <button class="btn primary" id="wzDoc">Скачать Word</button><button class="btn" id="wzPrint">Печать / PDF</button><button class="btn" id="wzTxt">.txt</button><button class="btn" id="wzAi">Проверить ИИ</button><button class="btn ghost" id="wzClear">Очистить</button>
+   </div>
+   <div class="msg-bubble" id="wzAiOut" style="display:none;max-width:100%;margin-top:14px;background:var(--surface);border:1px solid var(--line);"></div>`;
+  const fill=()=>Object.fromEntries(t.fields.map(f=>[f.k,data[f.k]||'']));
+  const missing=()=>req.filter(f=>!String(data[f.k]||'').trim()).length;
+  function upd(){
+   const m=missing(),d=req.length-m;
+   box.querySelector('#wzBarTxt').textContent=`Заполнено обязательных полей: ${d} из ${req.length}`;
+   box.querySelector('#wzBar').style.width=Math.round(d/req.length*100)+'%';
+   box.querySelector('#wzPrev').textContent=t.gen(fill());
+   try{localStorage.setItem(key,JSON.stringify(data));}catch(_){}
+  }
+  box.querySelectorAll('[data-k]').forEach(el=>el.addEventListener('input',()=>{data[el.dataset.k]=el.value;upd();}));
+  const ok=()=>missing()===0||confirm(`Не заполнено полей: ${missing()}. Они останутся прочерками. Продолжить?`);
+  const fin=()=>{saveDocToProfile(t.name,t.gen(fill()));};
+  box.querySelector('#wizClose').onclick=()=>bd.classList.add('hidden');
+  box.querySelector('#wzDoc').onclick=()=>{if(!ok())return;saveBlob(t.name+'.doc',toHtml(t.name,t.gen(fill())),'application/msword');fin();};
+  box.querySelector('#wzTxt').onclick=()=>{if(!ok())return;saveBlob(t.name+'.txt',t.gen(fill()),'text/plain;charset=utf-8');fin();};
+  box.querySelector('#wzPrint').onclick=()=>{if(!ok())return;const w=window.open('','_blank');if(!w){alert('Разрешите всплывающие окна для печати.');return;}w.document.write(toHtml(t.name,t.gen(fill())));w.document.close();w.focus();w.print();fin();};
+  box.querySelector('#wzClear').onclick=()=>{if(confirm('Очистить все поля?')){data={};try{localStorage.removeItem(key);}catch(_){}box.querySelectorAll('[data-k]').forEach(el=>el.value='');upd();}};
+  box.querySelector('#wzAi').onclick=async()=>{
+   const out=box.querySelector('#wzAiOut'),b=box.querySelector('#wzAi');
+   out.style.display='block';out.style.color='';out.textContent='ИИ проверяет документ…';b.disabled=true;
+   try{
+    const r=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'claim',text:t.gen(fill()),profile:aiProfile})});
+    const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||('Ошибка '+r.status));
+    out.innerHTML=escapeHtml(d.answer||'Пустой ответ.').replace(/\n/g,'<br>');
+   }catch(e){out.style.color='var(--danger)';out.textContent='Не получилось: '+e.message;}
+   b.disabled=false;
+  };
+  upd(); bd.classList.remove('hidden');
+ };
+ updateAiLabel();
+})();
+
+/* ===================== FIXES + WAVE 3 TEMPLATES ===================== */
+(function(){
+ /* картинки из папки img/ в проект не загружены: скрываем битые, чтобы не было значков ошибки */
+ document.addEventListener('error',e=>{if(e.target&&e.target.tagName==='IMG')e.target.style.display='none';},true);
+
+ const NB='\u00A0', IND=NB.repeat(20);
+ const v=(x,n)=>(x&&String(x).trim())?String(x).trim():'_'.repeat(n||14);
+ const o=(x,d)=>(x&&String(x).trim())?String(x).trim():d;
+ const head=a=>a.map(l=>l===''?'':IND+l).join('\n');
+ const sign='Дата: «___» ____________ 20___ г.          Подпись: ______________ / ______________';
+ const num=a=>a.filter(Boolean).map((x,i)=>(i+1)+'. '+x).join('\n');
+ const lines=s=>String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+ const F=(k,l,step,area)=>({k,l,step,area:!!area});
+ const T=(id,country,cat,name,desc,src,check,fields,gen)=>({id,country,cat,popular:false,name,desc,src,check,fields,gen});
+ const KZc='Гражданского процессуального кодекса Республики Казахстан', RUc='Гражданского процессуального кодекса Российской Федерации';
+ const party=(idL,who)=>[F('pName',who+': ФИО',1),F('pId',idL,1),F('pAddr',who+': место жительства',1),F('pContact',who+': телефон и электронный адрес',1)];
+ const pHead=(f,idN,who)=>[who+': '+v(f.pName),idN+': '+v(f.pId,12),'Адрес: '+v(f.pAddr,22),'Тел./e-mail: '+v(f.pContact,16)];
+
+ /* --- встречный иск --- */
+ const cntF=idL=>[F('court','Наименование суда, где рассматривается первоначальный иск',1),F('caseNo','Номер дела по первоначальному иску',1),...party(idL,'Истец по встречному иску (ответчик по первоначальному)'),F('dName','Ответчик по встречному иску (истец по первоначальному): ФИО или наименование',1),F('dAddr','Его место жительства или нахождения',1),F('dContact','Его телефон и e-mail (если известны)',1),
+  F('orig','О чём первоначальный иск (кратко)',2,1),F('essence','В чём нарушены ваши права и что вы требуете',2,1),F('facts','Обстоятельства и доказательства',2,1),F('law','Норма закона, на которой основано требование',2),F('link','Чем встречный иск связан с первоначальным: зачёт требований; исключает полностью или частично первоначальный иск; взаимная связь и более быстрое рассмотрение',2,1),
+  F('amount','Цена встречного иска (сумма)',3),F('calc','Расчёт взыскиваемой суммы',3,1),F('pretrial','Досудебный порядок: направляли ли претензию, когда, какой ответ',3,1),F('extra','Другие приложения (каждое с новой строки)',3,1)];
+ const cntG=(code,arts,idN,att)=>f=>head(['В '+v(f.court,24),'Дело № '+v(f.caseNo,12),'',...pHead(f,idN,'Истец по встречному иску (ответчик по первоначальному)'),'','Ответчик по встречному иску (истец по первоначальному): '+v(f.dName),'Адрес: '+v(f.dAddr,22),'Тел./e-mail: '+o(f.dContact,'не известны'),'','Цена встречного иска: '+v(f.amount,10)])+'\n\n'+
+  ['ВСТРЕЧНЫЙ ИСК','к иску: '+v(f.orig,24),'','В чём нарушение прав и требования:\n'+v(f.essence,30),'','Обстоятельства и доказательства:\n'+v(f.facts,30),'','Правовое основание: '+v(f.law,20),'','Основание принятия встречного иска: '+v(f.link,30),'','Расчёт взыскиваемой суммы: '+v(f.calc,30),'','Сведения о досудебном порядке: '+v(f.pretrial,30),'','На основании изложенного, руководствуясь '+v(f.law,12)+', а также '+arts+' '+code+',','','ПРОШУ СУД:',num(['Принять встречный иск к производству и рассмотреть его совместно с первоначальным иском.','Взыскать с ответчика по встречному иску '+v(f.dName,12)+' в пользу истца по встречному иску денежные средства в размере '+v(f.amount,10)+'.','Взыскать судебные расходы.']),'','Приложения:',num([...att,...lines(f.extra)]),'',sign].join('\n');
+
+ /* --- замена / отмена мер обеспечения --- */
+ const mF=(idL,repl)=>[F('court','Наименование суда',1),F('caseNo','Номер дела',1),...party(idL,'Заявитель'),F('dName','Другая сторона: ФИО или наименование',1),F('dAddr','Другая сторона: адрес',1),
+  F('cur','Какая мера обеспечения принята (определение суда: дата, суть меры)',2,1),...(repl?[F('newm','На какую меру просите заменить',2,1)]:[]),F('why',repl?'Почему замена допустима и не ущемит права другой стороны':'Почему меры больше не нужны (основания отпали, иск отклонён, мера несоразмерна)',2,1),F('extra','Приложения (каждое с новой строки)',3,1)];
+ const mG=(repl,code,arts,idN)=>f=>head(['В '+v(f.court,24),'Дело № '+v(f.caseNo,12),'',...pHead(f,idN,'Заявитель'),'','Другая сторона: '+v(f.dName),'Адрес: '+v(f.dAddr,22)])+'\n\n'+
+  [repl?'ЗАЯВЛЕНИЕ\nо замене меры обеспечения иска':'ЗАЯВЛЕНИЕ\nоб отмене мер по обеспечению иска','','По настоящему делу приняты меры по обеспечению иска: '+v(f.cur,30)+'.','',(repl?'Прошу заменить принятую меру на: '+v(f.newm,30)+'.':'Считаю, что оснований для сохранения принятых мер больше нет.'),'','Обоснование:\n'+v(f.why,30),'','На основании изложенного, руководствуясь '+arts+' '+code+',','','ПРОШУ СУД:',(repl?'Заменить принятую меру обеспечения иска на меру: '+v(f.newm,20)+'.':'Отменить меры по обеспечению иска, принятые определением суда.'),'','Приложения:',num(['Копия определения о принятии мер по обеспечению иска','Документы, подтверждающие доводы заявления',...lines(f.extra)]),'',sign].join('\n');
+
+ /* --- апелляционная жалоба --- */
+ const apF=idL=>[F('court','Суд, вынесший решение (жалоба подаётся через него)',1),F('appealCourt','Суд апелляционной инстанции, которому адресована жалоба',1),F('caseNo','Номер дела',1),...party(idL,'Заявитель жалобы'),F('role','Ваш процессуальный статус (истец, ответчик, третье лицо)',1),F('dName','Другая сторона: ФИО или наименование',1),F('dAddr','Другая сторона: адрес',1),
+  F('decision','Какое решение обжалуете (дата решения, суть резолютивной части)',2,1),F('finalDate','Дата изготовления решения в окончательной форме',2),F('grounds','В чём решение неправильно: нарушения закона, неверная оценка доказательств, неверно установленные факты (по пунктам)',2,1),F('request','Что просите (например: отменить решение полностью или в части и принять новое)',3,1),F('extra','Приложения (каждое с новой строки)',3,1)];
+ const apG=(arts,idN,att)=>f=>head(['В '+v(f.appealCourt,24),'через '+v(f.court,24),'','Дело № '+v(f.caseNo,12),'',...pHead(f,idN,'Заявитель жалобы ('+o(f.role,'статус')+')'),'','Другая сторона: '+v(f.dName),'Адрес: '+v(f.dAddr,22)])+'\n\n'+
+  ['АПЕЛЛЯЦИОННАЯ ЖАЛОБА','на решение суда','','Решением суда '+v(f.decision,30)+'. Решение изготовлено в окончательной форме: '+v(f.finalDate,10)+'.','','Считаю решение незаконным и необоснованным по следующим основаниям:\n'+v(f.grounds,30),'','На основании изложенного, руководствуясь '+arts+',','','ПРОШУ:',num(lines(f.request).length?lines(f.request):[v(f.request,30)]),'','Приложения:',num([...att,...lines(f.extra)]),'',sign].join('\n');
+
+ /* --- частная жалоба --- */
+ const prF=idL=>[F('court','Суд, вынесший определение (жалоба подаётся через него)',1),F('appealCourt','Суд, которому адресована жалоба',1),F('caseNo','Номер дела или материала',1),...party(idL,'Заявитель жалобы'),
+  F('ruling','Какое определение обжалуете (дата, о возвращении иска или об отказе в принятии иска, мотивы суда)',2,1),F('grounds','Почему определение неправильно (по пунктам)',2,1),F('request','Что просите',3,1),F('extra','Приложения (каждое с новой строки)',3,1)];
+ const prG=(arts,idN)=>f=>head(['В '+v(f.appealCourt,24),'через '+v(f.court,24),'','Дело № '+v(f.caseNo,12),'',...pHead(f,idN,'Заявитель жалобы')])+'\n\n'+
+  ['ЧАСТНАЯ ЖАЛОБА','на определение суда','','Определением суда '+v(f.ruling,30)+'.','','Считаю определение незаконным по следующим основаниям:\n'+v(f.grounds,30),'','На основании изложенного, руководствуясь '+arts+',','','ПРОШУ:',num(lines(f.request).length?lines(f.request):['Отменить обжалуемое определение и разрешить вопрос о принятии иска к производству.']),'','Приложения:',num(['Копия обжалуемого определения','Документы, подтверждающие доводы жалобы',...lines(f.extra)]),'',sign].join('\n');
+
+ const KZidL='Заявитель: ИИН', RUidL='Заявитель: СНИЛС или ИНН';
+ const kzAtt=['Документ об уплате государственной пошлины (либо ходатайство об отсрочке)','Документы, подтверждающие обстоятельства, на которых основаны требования','Документы, подтверждающие соблюдение досудебного порядка'];
+ const ruAtt=['Документ об уплате государственной пошлины','Документы, подтверждающие обстоятельства, на которых основаны требования','Документы, подтверждающие направление копий иска другим лицам, участвующим в деле'];
+ templates.push(
+  T('kz-cnt','Казахстан','Суд','Встречный иск','Иск ответчика к истцу в рамках уже начатого дела.','ГПК РК, ст. 153–154','Правила о форме и содержании иска применяются и ко встречному иску (ст. 153 ГПК РК, сверено 01.11.2026); предъявить его можно до окончания подготовки дела. Условия принятия — ст. 154.',cntF('Истец по встречному иску: ИИН'),cntG(KZc,'статьями 148, 153, 154','ИИН',kzAtt)),
+  T('ru-cnt','Россия','Суд','Встречный иск','Иск ответчика к истцу в рамках уже начатого дела.','ГПК РФ, ст. 137–138','Составлено по ст. 137–138 ГПК РФ: встречный иск предъявляется до принятия решения судом первой инстанции и по общим правилам предъявления иска. Сверьте редакцию на pravo.gov.ru.',cntF('Истец по встречному иску: СНИЛС или ИНН'),cntG(RUc,'статьями 137, 138','СНИЛС/ИНН',ruAtt)),
+  T('kz-rep','Казахстан','Суд','Заявление о замене меры обеспечения иска','Просьба заменить принятую меру на другую.','ГПК РК, ст. 159','Сверено по ст. 159 ГПК РК (01.11.2026): заявление рассматривается в течение пяти рабочих дней с извещением сторон, они вправе представить отзыв; ответчик может внести сумму иска на депозит вместо мер.',mF(KZidL,true),mG(true,KZc,'статьёй 159','ИИН')),
+  T('ru-rep','Россия','Суд','Заявление о замене меры обеспечения иска','Просьба заменить принятую меру на другую.','ГПК РФ, ст. 143','Составлено по ст. 143 ГПК РФ. Сверьте актуальную редакцию на pravo.gov.ru.',mF(RUidL,true),mG(true,RUc,'статьёй 143','СНИЛС/ИНН')),
+  T('kz-can','Казахстан','Суд','Заявление об отмене мер обеспечения иска','Просьба снять ранее принятые меры.','ГПК РК, ст. 160','Сверено по ст. 160 ГПК РК (01.11.2026): вопрос об отмене обеспечения разрешается не позднее пяти рабочих дней с извещением лиц, участвующих в деле.',mF(KZidL,false),mG(false,KZc,'статьёй 160','ИИН')),
+  T('ru-can','Россия','Суд','Заявление об отмене мер обеспечения иска','Просьба снять ранее принятые меры.','ГПК РФ, ст. 144','Составлено по ст. 144 ГПК РФ. Сверьте актуальную редакцию на pravo.gov.ru.',mF(RUidL,false),mG(false,RUc,'статьёй 144','СНИЛС/ИНН')),
+  T('kz-app','Казахстан','Жалобы','Апелляционная жалоба на решение суда','Жалоба в вышестоящий суд на решение по гражданскому делу.','ГПК РК, ст. 403–404','Требования к жалобе — ст. 403 (ч. 2) и 404 ГПК РК; подаётся через суд, вынесший решение. Срок обычно один месяц со дня изготовления решения в окончательной форме, но проверьте его по решению и кодексу. Эти статьи полностью не сверялись. Если срок пропущен, нужно ходатайство о его восстановлении.',apF('Заявитель: ИИН'),apG('статьями 403, 404 '+KZc,'ИИН',['Документ об уплате государственной пошлины (если требуется)','Доверенность представителя (если жалобу подписывает представитель)'])),
+  T('ru-app','Россия','Жалобы','Апелляционная жалоба на решение суда','Жалоба в вышестоящий суд на решение по гражданскому делу.','ГПК РФ, ст. 321–322','Срок — месяц со дня принятия решения в окончательной форме (ст. 321), содержание — ст. 322. С 1 января 2026 года порядок принятия жалоб изменён (ст. 322.1): проверьте актуальную процедуру на сайте суда и pravo.gov.ru. При пропуске срока нужно ходатайство о восстановлении (ст. 112).',apF('Заявитель: СНИЛС или ИНН'),apG('статьями 320–322 '+RUc,'СНИЛС/ИНН',['Документ об уплате государственной пошлины','Документы, подтверждающие направление копий жалобы другим лицам, участвующим в деле','Доверенность представителя (если жалобу подписывает представитель)'])),
+  T('kz-prv','Казахстан','Жалобы','Частная жалоба на возврат иска или отказ в его принятии','Жалоба, если суд вернул иск или отказал его принять.','ГПК РК, ст. 151–152','Сверено по ст. 151 (ч. 5) и 152 (ч. 4) ГПК РК (01.11.2026): определения об отказе в принятии иска и о его возвращении можно обжаловать. Срок и порядок подачи проверьте в определении суда и в кодексе.',prF('Заявитель: ИИН'),prG('статьями 151, 152 '+KZc,'ИИН')),
+  T('ru-prv','Россия','Жалобы','Частная жалоба на возврат иска или отказ в его принятии','Жалоба, если суд вернул иск или отказал его принять.','ГПК РФ, ст. 134–135','Составлено по ст. 134–135 ГПК РФ: на такие определения подаётся частная жалоба. Срок и порядок подачи проверьте в определении суда и в актуальной редакции кодекса: порядок обжалования мог измениться с 2026 года.',prF('Заявитель: СНИЛС или ИНН'),prG('статьями 134, 135 '+RUc,'СНИЛС/ИНН'))
+ );
+ updateAiLabel();
+})();
+
+/* ===================== COURSES V2 ===================== */
+(function(){
+ const Q=(q,ok,b,c,d,why)=>({q,o:[ok,b,c,d],why});
+ const cur=()=>(typeof aiProfile!=='undefined'&&aiProfile.country)||'Казахстан';
+ const P=(...a)=>a.map(x=>'<p>'+x+'</p>').join('');
+ const data=[
+ {id:'basics',title:'Основы права',meta:'2 урока · вводный',lessons:[
+  {title:'Иерархия норм и отрасли права',
+   text:P('Правовые нормы выстроены по силе. На вершине конституция: ей не могут противоречить ни законы, ни подзаконные акты. Ниже законы и кодексы, затем акты правительства и министерств, а в самом низу локальные документы организаций: правила и приказы.','При конфликте применяется норма более высокого уровня. Поэтому условие в приказе или договоре, которое ухудшает ваше положение по сравнению с законом, как правило, не действует.','Право делится на отрасли по предмету регулирования: гражданское (имущество и договоры), трудовое, административное (отношения с государством), уголовное, семейное. У каждой отрасли свой кодекс и своя процедура.'),
+   ex:'Приказ директора вводит взыскание, которого закон не допускает. Вы вправе оспорить его, сославшись на закон.',
+   terms:[['Юридическая сила','место акта в иерархии и его приоритет при конфликте'],['Локальный акт','документ организации, который действует только внутри неё']],
+   qs:[Q('Что применяется при противоречии закона и приказа организации?','Закон','Приказ, если он новее','То, что удобнее работодателю','Решение директора','Акт более высокого уровня имеет приоритет, а локальный документ не может ухудшать положение человека по сравнению с законом.'),
+       Q('К какой отрасли относятся споры о договоре купли-продажи?','Гражданское право','Уголовное право','Семейное право','Административное право','Договоры и имущественные отношения регулирует гражданское право.'),
+       Q('Что стоит на вершине иерархии норм?','Конституция','Кодексы','Указы и постановления','Локальные акты','Конституция имеет высшую юридическую силу, а все остальные акты ей подчиняются.')]},
+  {title:'Права, обязанности и ответственность',
+   text:P('Право даёт возможность действовать или требовать, обязанность означает необходимость что-то сделать или воздержаться. Они связаны: право одного участника почти всегда является обязанностью другого.','Дееспособность — способность самостоятельно приобретать права и обязанности своими действиями. У несовершеннолетних она ограничена, поэтому многие их сделки требуют согласия родителей.','Ответственность наступает за нарушение: гражданская (возместить ущерб, уплатить неустойку), административная (штраф), уголовная. Каждый вид имеет свою процедуру и свои гарантии.'),
+   ex:'Продавец обязан передать товар, а вы обязаны оплатить. Если одна сторона нарушила обязанность, другая вправе требовать исполнения.',
+   terms:[['Дееспособность','способность своими действиями приобретать права и обязанности'],['Неустойка','заранее определённая сумма за нарушение обязательства']],
+   qs:[Q('Что такое дееспособность?','Способность своими действиями приобретать права и обязанности','Право на жизнь','Наличие гражданства','Возраст выхода на пенсию','Дееспособность связана именно с самостоятельными юридическими действиями.'),
+       Q('Какая ответственность включает возмещение ущерба и неустойку?','Гражданско-правовая','Уголовная','Только дисциплинарная','Никакая','Эти меры восстанавливают имущественное положение потерпевшего, что характерно для гражданской ответственности.'),
+       Q('Продавец не передал оплаченный товар. Что вправе требовать покупатель?','Передать товар или вернуть деньги','Ждать год без требований','Только извинений','Изменить закон','Нарушенная обязанность продавца даёт покупателю право требовать исполнения или возврата денег.')]}]},
+ {id:'labor',title:'Трудовое право',meta:'2 урока · базовый',lessons:[
+  {title:'Трудовой договор',
+   text:P('Трудовой договор — основа отношений с работодателем. Его заключают письменно, и один экземпляр остаётся у работника. Обычно в нём указывают стороны, место работы, должность или трудовую функцию, дату начала, оплату труда, режим рабочего времени и отдыха.','Если вас допустили к работе без договора, трудовые отношения всё равно могут быть признаны. Доказательствами служат пропуск, переписка, табель, переводы зарплаты. Но надёжнее сразу требовать договор.','Перед подписью читайте всё: испытательный срок, условия оплаты, ответственность, порядок расторжения. Условия, которые хуже законодательных гарантий, как правило, недействительны.'),
+   ex:'В договоре сказано: «оклад по устной договорённости». Это риск: сумму нужно закрепить письменно.',
+   terms:[['Трудовая функция','работа по должности, профессии или специальности'],['Испытательный срок','период проверки работника, на который закон ставит ограничения']],
+   qs:[Q('Что нужно получить при приёме на работу?','Свой экземпляр подписанного договора','Только устное обещание','Копию паспорта работодателя','Расписку о долге','Без вашего экземпляра сложнее доказать условия работы и оплаты.'),
+       Q('Что делать, если вы работаете без договора?','Требовать оформления и сохранять доказательства работы','Ничего, это нормально','Уволиться без расчёта','Подписать любые бумаги позже','Требование оформления и доказательства защищают вас, если работодатель отрицает отношения.'),
+       Q('Как быть с условием договора, которое хуже законных гарантий?','Оно, как правило, недействительно','Оно обязательно, раз подписали','Оно действует только год','Это решает работодатель','Закон задаёт минимальные гарантии работника, и ухудшающие условия не применяются.')]},
+  {title:'Увольнение и окончательный расчёт',
+   text:P('Работник вправе расторгнуть договор по своей инициативе, как правило письменно предупредив работодателя в срок, установленный законом. Работодатель может уволить только по основаниям из закона и с соблюдением процедуры: уведомления, предложения других вакансий при сокращении, выплат.','В последний день работы должны выплатить всё причитающееся: зарплату, компенсацию за неиспользованный отпуск, а при увольнении по инициативе работодателя в ряде случаев и выходное пособие.','При нарушении потребуйте письменно расчёт и копию приказа, затем жалуйтесь в инспекцию труда или в суд. Сроки для споров об увольнении обычно короткие, поэтому не откладывайте.'),
+   ex:'Вас уволили, а отпускные не выплатили. Потребуйте расчёт письменно и сохраните ответ: это пригодится в суде.',
+   local:{'Россия':'Спор об увольнении можно передать в суд в течение одного месяца со дня вручения копии приказа или выдачи трудовой книжки (ст. 392 ТК РФ). Проверьте актуальную редакцию.'},
+   terms:[['Окончательный расчёт','все выплаты работнику в день увольнения'],['Инспекция труда','орган, который проверяет соблюдение трудовых прав']],
+   qs:[Q('Что должны выплатить в последний рабочий день?','Все причитающиеся суммы, включая компенсацию отпуска','Только зарплату за последний день','Ничего, расчёт через полгода','Только то, что захочет работодатель','Закон требует полного расчёта в день увольнения.'),
+       Q('Что делать, если расчёт не выплатили?','Потребовать письменно, затем жаловаться в инспекцию или в суд','Ждать год','Ничего','Написать в соцсети и ждать','Письменное требование и обращение в орган или суд создают доказательства и запускают защиту.'),
+       Q('Почему при споре об увольнении нельзя тянуть время?','Сроки обращения в суд короткие','Сроков нет','Суд не любит споры','Работодатель обидится','Пропуск срока может лишить возможности защитить право через суд.')]}]},
+ {id:'civil',title:'Гражданское право и договоры',meta:'3 урока · базовый',lessons:[
+  {title:'Договор и его существенные условия',
+   text:P('Договор — соглашение о правах и обязанностях. Для того чтобы он считался заключённым, нужны существенные условия: предмет (что передаётся или делается) и другие, которые закон называет обязательными для данного вида договора, например цена или срок.','Форма: для многих сделок нужна простая письменная форма, для отдельных (например, с недвижимостью) нотариус или государственная регистрация. Устные сделки доказывать трудно.','На практике фиксируйте предмет, цену, сроки, порядок расчётов и последствия нарушения. Храните оригинал договора и переписку, подтверждающую исполнение.'),
+   ex:'Вы договорились о ремонте, но не записали, что именно и к какому сроку делает мастер. Спор будет трудно выиграть.',
+   terms:[['Существенные условия','без согласования которых договор не считается заключённым'],['Предмет договора','что именно передаётся, выполняется или оказывается']],
+   qs:[Q('Что называют существенными условиями договора?','Условия, без которых договор не считается заключённым','Любые дополнительные пожелания','Мелкие технические детали','Только цену','Если существенное условие не согласовано, договор не возникает.'),
+       Q('Почему письменная форма важна?','Облегчает доказывание условий и исполнения','Нужна только для красоты','Заменяет закон','Нужна только нотариусу','Письменный документ позволяет доказать, о чём договорились стороны.'),
+       Q('Что полезно хранить после исполнения договора?','Оригинал, акты, чеки и переписку','Только устные записи','Ничего','Копию паспорта продавца','Эти документы доказывают исполнение и размер расчётов.')]},
+  {title:'Ответственность за нарушение обязательств',
+   text:P('Нарушение договора даёт право требовать исполнения, возмещения убытков, а если это предусмотрено, неустойки (штрафа или пени). Убытки — реальный ущерб и упущенная выгода, их размер нужно доказать. Неустойка — заранее оговорённая сумма: кредитору не нужно доказывать размер убытков.','Суд во многих странах вправе уменьшить явно несоразмерную неустойку (в России это ст. 333 ГК РФ). Условие о неустойке стоит согласовать письменно.','Перед иском направьте претензию: она фиксирует требование, даёт сторонам шанс договориться и подтверждает соблюдение досудебного порядка.'),
+   ex:'Поставщик задержал товар на месяц. Вы вправе потребовать неустойку по договору, не доказывая, сколько потеряли.',
+   terms:[['Убытки','реальный ущерб и упущенная выгода'],['Претензия','письменное требование к контрагенту до обращения в суд']],
+   qs:[Q('Что нужно доказывать при взыскании убытков?','Размер ущерба и связь с нарушением','Только то, что договор был','Ничего','Цвет договора','Убытки взыскиваются только в доказанном размере и при связи с нарушением.'),
+       Q('Чем неустойка удобна кредитору?','Не нужно доказывать размер убытков','Её нельзя оспорить','Она всегда больше убытков','Не требует договора','Неустойка заранее определена, поэтому доказывать убытки не нужно.'),
+       Q('Зачем направлять претензию до иска?','Зафиксировать требование и дать шанс решить спор без суда','Это запрещено','Чтобы суд отказал','Чтобы получить отсрочку пошлины','Претензия подтверждает досудебный порядок и часто ускоряет урегулирование.')]},
+  {title:'Исковая давность',
+   text:P('Исковая давность — срок, в течение которого можно защитить право в суде. Общий срок в праве России и Казахстана составляет три года, но для отдельных требований есть особые сроки.','Срок обычно считают с момента, когда лицо узнало или должно было узнать о нарушении права. Суд применяет давность только по заявлению стороны, сделанному до вынесения решения: если ответчик промолчал, иск рассматривают по существу.','Не рассчитывайте, что переписка с должником остановит срок. Если срок подходит к концу, подавайте иск заранее.'),
+   ex:'Долг вернули не в срок три года и два месяца назад. Ответчик заявит о давности, и суд откажет в иске.',
+   local:{'Россия':'Общий срок — три года (ст. 196 ГК РФ), применяется по заявлению стороны (ст. 199 ГК РФ).','Казахстан':'Общий срок — три года (ст. 178 ГК РК, сверено 01.11.2026); суд применяет давность только по заявлению стороны до вынесения решения (ст. 179 ГК РК).'},
+   terms:[['Исковая давность','срок на защиту права через суд'],['Заявление о применении давности','просьба стороны к суду отказать в иске из-за пропуска срока']],
+   qs:[Q('Какой общий срок исковой давности в России и Казахстане?','Три года','Один месяц','Десять лет','Срока нет','В обеих странах общий срок составляет три года.'),
+       Q('Когда суд применяет исковую давность?','Только по заявлению стороны до решения','Всегда по своей инициативе','После вынесения решения','Никогда','Если сторона не заявила о давности, суд рассматривает иск по существу.'),
+       Q('Что разумно делать, если срок давности скоро истекает?','Подать иск заранее','Ждать ответа должника','Сменить адрес','Подать жалобу в соцсетях','Переписка обычно срок не останавливает, а подача иска сохраняет право.')]}]},
+ {id:'consumer',title:'Права потребителей',meta:'2 урока · практический',lessons:[
+  {title:'Товар ненадлежащего качества',
+   text:P('Если в товаре обнаружен недостаток, потребитель вправе потребовать по выбору: бесплатного устранения недостатка, замены, соразмерного уменьшения цены или возврата денег. Точный набор требований и сроки зависят от закона страны и вида товара.','Сохраните чек или другое доказательство покупки: переписку, выписку по карте, свидетелей. Утрата чека сама по себе не лишает права.','Алгоритм такой: письменная претензия продавцу с доказательством отправки, срок на ответ по закону, затем жалоба в орган по защите прав потребителей или иск. Для сложной техники может понадобиться экспертиза качества.'),
+   ex:'Телефон сломался в гарантийный срок. Напишите претензию, приложите копию гарантии и сохраните доказательство отправки.',
+   terms:[['Недостаток','несоответствие товара договору или обычным требованиям'],['Экспертиза качества','проверка специалистом, есть ли недостаток и по какой причине он возник']],
+   qs:[Q('Лишает ли утрата чека права на возврат?','Нет, покупку можно доказать иначе','Да, всегда','Только после года','Только в магазине','Факт покупки можно подтвердить выпиской, перепиской, свидетелями.'),
+       Q('Что включить в претензию продавцу?','Описание недостатка, требование и доказательства покупки','Только жалобу на цены','Угрозы','Фото знакомых','Претензия должна быть конкретной и подтверждённой документами.'),
+       Q('Что часто нужно при споре о качестве сложной техники?','Экспертиза качества','Опрос соседей','Ничего','Смена продавца','Эксперт подтверждает наличие недостатка и причину его возникновения.')]},
+  {title:'Возврат товара надлежащего качества',
+   text:P('Даже качественный непродовольственный товар можно обменять или вернуть, если он не подошёл по форме, размеру, цвету или комплектации. Условия: товар не использовался, сохранены товарный вид, пломбы, ярлыки и подтверждение покупки.','Срок короткий. В России и Казахстане он составляет 14 дней. Для интернет-торговли правила могут отличаться, проверяйте закон и условия магазина.','Есть перечень товаров, которые вернуть нельзя: например, нательное бельё и лекарства. Перечни в разных странах не совпадают.'),
+   ex:'Куртка не подошла по размеру через 5 дней после покупки. Вы вправе её обменять, если вид и ярлыки сохранены.',
+   local:{'Россия':'Обмен качественного товара в течение 14 дней — ст. 25 Закона РФ «О защите прав потребителей»; перечень невозвратных товаров утверждает Правительство РФ.','Казахстан':'Возврат или обмен в течение 14 календарных дней — Закон РК «О защите прав потребителей» (статья 30 по сведениям 2026 года; ранее норма была в ст. 14, проверьте нумерацию). Исключения: лекарства и медизделия, нательное бельё, чулочно-носочные изделия, животные и растения, товары на метраж, абонентские устройства сотовой связи.'},
+   terms:[['Товарный вид','внешний вид товара без следов использования'],['Невозвратный товар','товар из перечня, который нельзя обменять или вернуть']],
+   qs:[Q('В какой срок можно вернуть качественный непродовольственный товар в России и Казахстане?','14 дней','24 часа','30 дней','Один год','В обеих странах закон устанавливает срок в 14 дней.'),
+       Q('Какое условие обязательно для возврата качественного товара?','Товар не использовался, сохранены товарный вид и ярлыки','Товар использован','Нет упаковки и ярлыков','Куплен год назад','Возврат возможен только если товар сохранил потребительские свойства.'),
+       Q('Что проверить перед возвратом онлайн-покупки?','Закон и условия магазина: правила могут отличаться','Ничего','Цвет упаковки','Рейтинг магазина','Для дистанционной торговли часто действуют особые правила.')]}]},
+ {id:'gov',title:'Взаимодействие с госорганами',meta:'2 урока · практический',lessons:[
+  {title:'Как составить обращение',
+   text:P('Обращение должно быть понятным и по существу: кому адресовано (орган и должность), от кого (ФИО, адрес для ответа, контакты), что произошло (факты и даты), чего вы просите (конкретное требование), приложения, дата и подпись.','Пишите коротко и по пунктам, без оскорблений: иначе обращение могут оставить без ответа.','Отправляйте так, чтобы можно было доказать факт подачи: личный приём с отметкой, заказное письмо с уведомлением, электронная приёмная. Сохраняйте номер регистрации.'),
+   ex:'В обращении есть жалоба, но нет требования. Орган отвечает общими словами. Укажите, что именно вы просите сделать.',
+   terms:[['Обращение','письменная или электронная просьба, жалоба или предложение в госорган'],['Регистрация обращения','присвоение номера, с которого начинается срок рассмотрения']],
+   qs:[Q('Что обязательно указать в обращении?','ФИО и адрес для ответа','Хобби','Марку телефона','Возраст соседей','Без адреса и данных заявителя орган не сможет направить ответ.'),
+       Q('Как подтвердить подачу обращения?','Отметка о приёме, уведомление о вручении или номер регистрации','Сказать знакомым','Никак','Через родственников','Подтверждение нужно, чтобы доказать факт и дату обращения.'),
+       Q('Почему важно конкретное требование?','По нему орган принимает решение и отвечает по существу','Так красиво','Это не нужно','Без него быстрее','Конкретная просьба определяет содержание ответа.')]},
+  {title:'Сроки рассмотрения и обжалование',
+   text:P('Срок рассмотрения обращения устанавливает закон конкретной страны. При необходимости проверки его могут продлить, но заявителя должны уведомить.','Ответ должен быть по существу и мотивированным. Если срок нарушен или ответ формальный, напишите жалобу в вышестоящий орган, в прокуратуру (где она есть) или обжалуйте действия в суде.','Сохраняйте все ответы и даты: они станут доказательствами.'),
+   ex:'Прошёл срок, а ответа нет. Напишите жалобу вышестоящему органу и приложите копию первого обращения с отметкой о приёме.',
+   local:{'Россия':'Обычно 30 дней со дня регистрации обращения (Федеральный закон № 59-ФЗ).','Казахстан':'По данным портала gov.kz, государственный орган отвечает в течение 15 календарных дней; в сложных случаях срок можно продлить. Порядок определяет административный процедурно-процессуальный кодекс, проверьте актуальные сроки на adilet.zan.kz.'},
+   terms:[['Мотивированный ответ','ответ с объяснением причин решения'],['Вышестоящий орган','орган, который контролирует работу нижестоящего']],
+   qs:[Q('Кто устанавливает срок рассмотрения обращения?','Закон конкретной страны','Сам чиновник','Заявитель','Случайный выбор','Срок закреплён нормативным актом, поэтому в разных странах он разный.'),
+       Q('Что делать при формальном ответе?','Жаловаться вышестоящему органу или в суд','Смириться','Отправить то же самое снова','Ничего','Формальный ответ можно обжаловать.'),
+       Q('Что нужно хранить?','Все ответы и даты','Ничего','Только конверты','Чужие письма','Документы подтверждают ход обращения.')]}]},
+ {id:'court',title:'Суд и процесс',meta:'3 урока · практический',lessons:[
+  {title:'Путь дела от претензии до исполнения',
+   text:P('Типичный путь: претензия, иск, подготовка дела, судебное заседание, решение, обжалование, исполнение. Решение вступает в силу не сразу: у сторон есть время на обжалование.','После вступления в силу выдаётся исполнительный документ, и решение исполняют через орган принудительного исполнения.','Тот, кто пропустил срок, может просить его восстановить, но только при уважительных причинах и с доказательствами.'),
+   ex:'Решение вынесено, но вы не согласны. Проверьте срок обжалования сразу: он начинает идти с момента, который определяет закон.',
+   terms:[['Вступление в силу','момент, когда решение становится обязательным для исполнения'],['Исполнительный документ','документ, по которому принудительно исполняют решение']],
+   qs:[Q('Что обычно предшествует иску?','Претензия или попытка урегулирования','Исполнение решения','Апелляция','Приговор','Досудебный порядок подтверждает попытку решить спор без суда.'),
+       Q('Что происходит после вступления решения в силу?','Выдаётся исполнительный документ и начинается исполнение','Дело рассматривают заново','Ничего','Суд закрывается','Исполнение идёт по исполнительному документу.'),
+       Q('Когда можно просить восстановить пропущенный срок?','При уважительной причине с доказательствами','Всегда','Никогда','По просьбе судьи','Суд восстанавливает срок только при подтверждённых уважительных причинах.')]},
+  {title:'Доказательства',
+   text:P('Суд решает по доказательствам: договорам, распискам, переписке, переводам, актам, показаниям свидетелей, заключениям экспертов. Каждая сторона доказывает то, на что ссылается.','Доказательство должно быть относимым (связано с делом) и допустимым (получено законным путём). Распечатки переписки лучше заверять или сохранять в оригинале.','Если нужный документ у другой стороны или у организации, можно просить суд его истребовать: в разделе документов есть шаблон ходатайства.'),
+   ex:'Договор есть, а акт выполненных работ у подрядчика. Попросите суд истребовать его, объяснив, что акт подтверждает.',
+   terms:[['Относимость','связь доказательства с обстоятельствами дела'],['Допустимость','получение доказательства законным способом']],
+   qs:[Q('Кто доказывает свои доводы?','Каждая сторона то, на что ссылается','Только судья','Только ответчик','Никто','Бремя доказывания лежит на стороне, которая ссылается на факт.'),
+       Q('Что значит допустимое доказательство?','Полученное законным способом в нужной форме','Любое','Только устное','Только платное','Допустимость связана с законностью получения и формой.'),
+       Q('Что делать, если документ находится у другой стороны?','Просить суд истребовать его','Забрать силой','Отказаться от иска','Ждать','Суд вправе истребовать доказательства по ходатайству.')]},
+  {title:'Подсудность, пошлина, сроки',
+   text:P('Подсудность определяет, в какой суд подавать иск. Общее правило во многих странах: по месту жительства или нахождения ответчика, с исключениями (например, споры о недвижимости или иски потребителей). Ошибка приведёт к возврату иска.','Госпошлина зависит от цены иска и вида требования. Для отдельных категорий возможны льготы, а при тяжёлом положении можно просить отсрочку или рассрочку.','Перед подачей проверьте: правильный суд, пошлина, копии для участников дела, доказательства досудебного порядка и срок давности.'),
+   ex:'Вы подали иск не в тот суд. Его вернут, а время будет потеряно. Сверьте подсудность до подачи.',
+   terms:[['Подсудность','правило, определяющее, в какой суд подавать иск'],['Госпошлина','обязательный платёж за обращение в суд']],
+   qs:[Q('Где обычно подают иск?','По месту жительства или нахождения ответчика, с исключениями','В любом суде страны','В суде соседа','В любом банке','Общее правило подсудности привязано к ответчику, но есть исключения.'),
+       Q('Что происходит при ошибке в подсудности?','Иск могут вернуть','Ничего','Суд исправит всё сам','Назначат штраф','Неподсудный иск возвращают заявителю.'),
+       Q('Что можно просить при тяжёлом имущественном положении?','Отсрочку или рассрочку госпошлины','Бесплатный суд всегда','Отмену закона','Ничего','Закон допускает отсрочку или рассрочку при подтверждённом положении.')]}]}
+ ];
+ courses.length=0; data.forEach(c=>courses.push(c));
+ while(romans.length<courses.length) romans.push(String(romans.length+1));
+
+ /* ---------- storage ---------- */
+ const sc=()=>store.get('lecodex_scores',{});
+ const wr=()=>store.get('lecodex_wrong',{});
+ const fin=()=>store.get('lecodex_final',{});
+ function mark(cid,id,bad){const w=wr();const a=new Set(w[cid]||[]);bad?a.add(id):a.delete(id);w[cid]=[...a];store.set('lecodex_wrong',w);}
+ const portalOf=()=>((countries.find(x=>x.name===cur())||{}).url)||'';
+ const localBox=l=>{if(!l.local)return '';const c=cur(),t=l.local[c];
+  return `<div style="border-left:3px solid var(--accent);background:var(--surface);padding:10px 12px;border-radius:8px;font-size:13px;margin:12px 0;"><b>Для страны «${c}»:</b> ${t||('точное правило для этой страны здесь пока не сверено. Проверьте его на официальном портале'+(portalOf()?' ('+portalOf()+')':'')+'.')}</div>`;};
+
+ /* ---------- quiz engine ---------- */
+ function quiz(items,passMin,done){
+  const qs=items.map((q,n)=>{const idx=[0,1,2,3];for(let i=3;i>0;i--){const j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}return {...q,order:idx,_qi:n};});
+  const host=document.createElement('div');
+  host.innerHTML=`<div class="qprog" style="font-size:12.5px;color:var(--ink-faint);margin-bottom:8px;"></div>${qs.map((q,qi)=>`<div class="quiz-box" data-qi="${qi}" style="margin-bottom:12px;"><div class="quiz-q">${qi+1}. ${q.q}</div>${q.order.map(oi=>`<label class="quiz-opt"><input type="radio" name="q${qi}" value="${oi}">${q.o[oi]}</label>`).join('')}<div class="fb"></div></div>`).join('')}<div class="res"></div>`;
+  let answered=0,ok=0;const bad=[],good=[];
+  const prog=()=>{host.querySelector('.qprog').textContent=`Отвечено: ${answered} из ${qs.length}. Ответ проверяется сразу после выбора.`;};
+  prog();
+  host.querySelectorAll('input[type=radio]').forEach(inp=>inp.addEventListener('change',()=>{
+   const box=inp.closest('.quiz-box'),qi=Number(box.dataset.qi),q=qs[qi];
+   if(box.dataset.done)return; box.dataset.done='1';
+   const hit=Number(inp.value)===0;
+   if(hit){ok++;good.push(q);}else bad.push(q);
+   box.querySelectorAll('.quiz-opt').forEach(l=>{const inpt=l.querySelector('input');inpt.disabled=true;
+    if(Number(inpt.value)===0){l.style.outline='2px solid #2e7d32';l.style.borderRadius='8px';}
+    else if(inpt===inp){l.style.outline='2px solid #c62828';l.style.borderRadius='8px';}});
+   box.querySelector('.fb').innerHTML=`<div class="quiz-fb ${hit?'ok':'no'}">${hit?'Верно. ':'Неверно. Правильный ответ: '+q.o[0]+'. '}${q.why}</div>`;
+   answered++;prog();
+   if(answered===qs.length) host.querySelector('.res').innerHTML=done({ok,total:qs.length,pass:ok>=passMin,bad,good});
+  }));
+  return host;
+ }
+
+ /* ---------- modals ---------- */
+ const head=(t,idc)=>`<div class="modal-head"><h2>${t}</h2><button class="modal-close" id="${idc}" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>`;
+ const bd=()=>document.getElementById('modalBackdrop'), bx=()=>document.getElementById('modalBox');
+
+ openCourse=function(c){
+  const box=bx();box.className='modal wide';
+  const done=getProgress()[c.id]||[],scores=(sc()[c.id])||{},all=done.length===c.lessons.length;
+  const wrong=(wr()[c.id]||[]).length, passed=!!fin()[c.id];
+  box.innerHTML=head(c.title,'courseClose')+`<div class="sub">${c.meta}</div>
+   <p style="font-size:13px;color:var(--ink-soft);margin:10px 0;">Как проходить: прочитайте урок, разберите пример, ответьте на 3 вопроса. Урок засчитывается при двух верных ответах из трёх. Ошибки сохраняются для повторения, а после всех уроков открывается итоговый тест.</p>
+   <ul class="lesson-list">${c.lessons.map((l,i)=>`<li><button class="lesson-row ${done.includes(i)?'done':''}" data-i="${i}"><span class="lesson-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span>${l.title}${scores[i]!=null?` <span style="margin-left:auto;font-size:12px;color:var(--ink-faint)">лучший результат: ${scores[i]}/3</span>`:''}</button></li>`).join('')}</ul>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+    <button class="btn ${all?'primary':''}" id="cFinal" ${all?'':'disabled'}>${passed?'Итоговый тест: сдан. Пересдать':'Итоговый тест'}</button>
+    <button class="btn" id="cReview" ${wrong?'':'disabled'}>Повторить ошибки (${wrong})</button></div>
+   ${all?'':'<div style="font-size:12px;color:var(--ink-faint);margin-top:8px;">Итоговый тест откроется после прохождения всех уроков.</div>'}`;
+  box.querySelector('#courseClose').onclick=()=>{bd().classList.add('hidden');renderCourses();};
+  box.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>openLesson(c,Number(b.dataset.i)));
+  box.querySelector('#cFinal').onclick=()=>finalTest(c);
+  box.querySelector('#cReview').onclick=()=>review(c);
+  bd().classList.remove('hidden');
+ };
+
+ openLesson=function(c,i){
+  const l=c.lessons[i],box=bx();box.className='modal wide';
+  box.innerHTML=head(l.title,'lsClose')+`<div class="sub">${c.title} · урок ${i+1} из ${c.lessons.length}</div>
+   <div class="lesson-text">${l.text}</div>
+   <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;margin:12px 0;"><b>Пример:</b> ${l.ex}</div>
+   ${localBox(l)}
+   <div style="font-size:13px;margin:10px 0;">${l.terms.map(t=>`<div><b>${t[0]}</b> — ${t[1]}</div>`).join('')}</div>
+   <h4 style="margin:18px 0 8px;font-size:14px;">Проверьте себя</h4><div id="qHost"></div>`;
+  box.querySelector('#lsClose').onclick=()=>{box.querySelector('#lsClose').blur();openCourse(c);};
+  const host=quiz(l.qs,2,r=>{
+   const s=sc();s[c.id]=s[c.id]||{};s[c.id][i]=Math.max(s[c.id][i]||0,r.ok);store.set('lecodex_scores',s);
+   l.qs.forEach((q,qi)=>mark(c.id,i+'-'+qi,r.bad.some(b=>b._qi===qi)));
+   if(r.pass)setLessonDone(c.id,i);
+   renderCourses();renderProfile();
+   const nxt=i+1<c.lessons.length;
+   return `<div class="quiz-fb ${r.pass?'ok':'no'}" style="margin-top:12px;"><b>Результат: ${r.ok} из ${r.total}.</b> ${r.pass?'Урок пройден.':'Для зачёта нужно минимум 2 верных ответа. Перечитайте материал и пересдайте.'}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">${r.pass?(nxt?'<button class="btn primary" id="rNext">Следующий урок</button>':'')+'<button class="btn" id="rBack">К курсу</button>':'<button class="btn primary" id="rRetry">Пересдать</button><button class="btn" id="rBack">К курсу</button>'}</div>`;
+  });
+  box.querySelector('#qHost').appendChild(host);
+  host.addEventListener('click',e=>{
+   if(e.target.id==='rNext')openLesson(c,i+1);
+   if(e.target.id==='rBack')openCourse(c);
+   if(e.target.id==='rRetry')openLesson(c,i);
+  });
+  bd().classList.remove('hidden');
+ };
+
+ function sample(a,n){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b.slice(0,n);}
+ function finalTest(c){
+  const pool=c.lessons.flatMap(l=>l.qs),n=Math.min(6,pool.length),need=Math.ceil(n*0.8),box=bx();
+  box.innerHTML=head('Итоговый тест: '+c.title,'ftClose')+`<div class="sub">${n} вопросов · для сдачи нужно ${need} верных</div><div id="qHost" style="margin-top:12px;"></div>`;
+  box.querySelector('#ftClose').onclick=()=>openCourse(c);
+  const host=quiz(sample(pool,n),need,r=>{
+   if(r.pass){const f=fin();f[c.id]=true;store.set('lecodex_final',f);}
+   return `<div class="quiz-fb ${r.pass?'ok':'no'}" style="margin-top:12px;"><b>Результат: ${r.ok} из ${r.total}.</b> ${r.pass?'Итоговый тест сдан. Курс завершён.':'Нужно минимум '+need+'. Повторите уроки и попробуйте ещё раз.'}</div><div style="margin-top:12px;"><button class="btn primary" id="rBack">К курсу</button></div>`;
+  });
+  box.querySelector('#qHost').appendChild(host);
+  host.addEventListener('click',e=>{if(e.target.id==='rBack')openCourse(c);});
+ }
+ function review(c){
+  const ids=wr()[c.id]||[],box=bx();
+  const items=ids.map(id=>{const[a,b]=id.split('-').map(Number);const q=c.lessons[a]&&c.lessons[a].qs[b];return q?{...q,_id:id}:null;}).filter(Boolean);
+  if(!items.length){openCourse(c);return;}
+  box.innerHTML=head('Повторение ошибок','rvClose')+`<div class="sub">${c.title} · вопросов: ${items.length}</div><div id="qHost" style="margin-top:12px;"></div>`;
+  box.querySelector('#rvClose').onclick=()=>openCourse(c);
+  const host=quiz(items,0,r=>{r.good.forEach(q=>mark(c.id,q._id,false));r.bad.forEach(q=>mark(c.id,q._id,true));
+   return `<div class="quiz-fb ${r.bad.length?'no':'ok'}" style="margin-top:12px;"><b>Верно: ${r.ok} из ${r.total}.</b> ${r.bad.length?'Неверные вопросы останутся в списке повторения.':'Все ошибки исправлены.'}</div><div style="margin-top:12px;"><button class="btn primary" id="rBack">К курсу</button></div>`;});
+  box.querySelector('#qHost').appendChild(host);
+  host.addEventListener('click',e=>{if(e.target.id==='rBack')openCourse(c);});
+ }
+ renderCourses();
+})();
+</script>
+</body>
+</html>
